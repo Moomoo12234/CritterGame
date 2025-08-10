@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://01uxvosjg14a"]
+
+[ext_resource type="Script" uid="uid://bi2udmqwhb44c" path="res://src/Scripts/rally_module.gd" id="1_fwc35"]
+
+[node name="RallyModule" type="Node"]
+script = ExtResource("1_fwc35")

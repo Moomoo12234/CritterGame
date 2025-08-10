@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://000mnlm4usd0"]
+
+[ext_resource type="Texture2D" uid="uid://wlo1euh3b6yk" path="res://src/Sprites/BG.png" id="1_2av6j"]
+[ext_resource type="PackedScene" uid="uid://tt4hmqejefi" path="res://src/Scenes/rally_point.tscn" id="3_7j17x"]
+[ext_resource type="PackedScene" uid="uid://d4ik23ij30ue7" path="res://src/Scenes/nest.tscn" id="4_7j17x"]
+[ext_resource type="PackedScene" uid="uid://ktynuufwlole" path="res://src/Scenes/hole.tscn" id="4_h6v6y"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+texture = ExtResource("1_2av6j")
+
+[node name="Rally Point" parent="." node_paths=PackedStringArray("freeAnts") instance=ExtResource("3_7j17x")]
+position = Vector2(543, 221)
+freeAnts = NodePath("../FreeAnts")
+
+[node name="FreeAnts" type="Node2D" parent="."]
+
+[node name="Ants" type="Node2D" parent="."]
+
+[node name="Nest" parent="." node_paths=PackedStringArray("freeAnts", "ants") instance=ExtResource("4_7j17x")]
+position = Vector2(126, 300)
+maxAnts = 1
+freeAnts = NodePath("../FreeAnts")
+ants = NodePath("../Ants")
+
+[node name="Hole" parent="." node_paths=PackedStringArray("freeAnts") instance=ExtResource("4_h6v6y")]
+position = Vector2(241, 591)
+freeAnts = NodePath("../FreeAnts")

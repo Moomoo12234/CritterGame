@@ -1,0 +1,45 @@
+[gd_scene load_steps=9 format=3 uid="uid://ktynuufwlole"]
+
+[ext_resource type="Script" uid="uid://71o2gggiqot5" path="res://src/Scripts/hole.gd" id="1_sxxd3"]
+[ext_resource type="Texture2D" uid="uid://cu7r6nir11cjp" path="res://src/Sprites/Hole1.png" id="2_7l3ct"]
+[ext_resource type="Texture2D" uid="uid://cdj1h5krjxacq" path="res://src/Sprites/Hole2.png" id="3_gpk0t"]
+[ext_resource type="Texture2D" uid="uid://dkk6te0n4ddlw" path="res://src/Sprites/Hole3.png" id="4_ktvsf"]
+[ext_resource type="Texture2D" uid="uid://cg7ajiueor61l" path="res://src/Sprites/Hole4.png" id="5_ti42a"]
+[ext_resource type="PackedScene" uid="uid://dstqdmgnqm35v" path="res://src/Scenes/hover_module.tscn" id="6_gpk0t"]
+[ext_resource type="PackedScene" uid="uid://01uxvosjg14a" path="res://src/Scenes/rally_module.tscn" id="7_ktvsf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mdbp8"]
+radius = 25.0
+
+[node name="Hole" type="Node2D"]
+position = Vector2(105, 63)
+script = ExtResource("1_sxxd3")
+holeTextures = Array[Texture2D]([ExtResource("5_ti42a"), ExtResource("4_ktvsf"), ExtResource("3_gpk0t"), ExtResource("2_7l3ct")])
+holeTextureNums = Array[int]([1, 2, 3, 4])
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("2_7l3ct")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = 25.0
+offset_right = 20.0
+offset_bottom = 48.0
+horizontal_alignment = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_mdbp8")
+
+[node name="HoverModule" parent="." node_paths=PackedStringArray("area") instance=ExtResource("6_gpk0t")]
+area = NodePath("../Area2D")
+
+[node name="RallyModule" parent="." node_paths=PackedStringArray("HoverModule", "lbl") instance=ExtResource("7_ktvsf")]
+HoverModule = NodePath("../HoverModule")
+lbl = NodePath("../Label")
+rad = 6
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

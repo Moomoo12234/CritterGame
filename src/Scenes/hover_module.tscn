@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dstqdmgnqm35v"]
+
+[ext_resource type="Script" uid="uid://bmuwypaq24pmh" path="res://src/Scripts/hover_module.gd" id="1_akgp3"]
+
+[node name="HoverModule" type="Node"]
+script = ExtResource("1_akgp3")

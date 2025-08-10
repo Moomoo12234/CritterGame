@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://tt4hmqejefi"]
+
+[ext_resource type="Script" uid="uid://wjm8jim2cbm4" path="res://src/Scripts/rally_point.gd" id="1_g6p55"]
+[ext_resource type="Texture2D" uid="uid://h2cc1phfq04p" path="res://src/Sprites/RallyPoint.png" id="2_grskp"]
+[ext_resource type="PackedScene" uid="uid://dstqdmgnqm35v" path="res://src/Scenes/hover_module.tscn" id="3_grskp"]
+[ext_resource type="PackedScene" uid="uid://01uxvosjg14a" path="res://src/Scenes/rally_module.tscn" id="4_ss6ni"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ss6ni"]
+radius = 65.123
+
+[node name="Rally Point" type="Node2D"]
+script = ExtResource("1_g6p55")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("2_grskp")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = 65.0
+offset_right = 20.0
+offset_bottom = 88.0
+text = "1/10"
+horizontal_alignment = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ss6ni")
+
+[node name="HoverModule" parent="." node_paths=PackedStringArray("area") instance=ExtResource("3_grskp")]
+area = NodePath("../Area2D")
+
+[node name="RallyModule" parent="." node_paths=PackedStringArray("HoverModule", "lbl") instance=ExtResource("4_ss6ni")]
+HoverModule = NodePath("../HoverModule")
+lbl = NodePath("../Label")
