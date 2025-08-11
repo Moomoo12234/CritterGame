@@ -1,63 +1,70 @@
 extends CharacterBody2D
+class_name ant
 
-enum STATES {
-	IDLE,
-	COLLECTING,
-	ATTACKING
-}
+@export var dead: Texture2D
 
-var state: STATES = STATES.IDLE
-
-@export var empty: Texture2D
-@export var full: Texture2D
+@export var nest: Node2D
 
 @export var speed: int
-@export var accelVector: float
 @export var moveRange: int
+@export var hp: int = 1
 @export var rally: Node
 
-var freeAnts: Node2D
-var ants: Node2D
-var nest: Node2D
-
 var target: Vector2
-
-var reachedTarget: bool = false
+var accelVector: float = 1
 var assigned: bool = false
-var hasFood: bool = false
+var reachedTarget: bool = false
 
-func deliverFood() -> void:
-	$Sprite2D.texture = empty
-	if rally:
-		pickTarget(rally)
-	else:
-		unassign()
-	hasFood = false
+var eTargets = []
 
-func collectFood():
-	$Sprite2D.texture = full
-	target = nest.position
-	hasFood = true
+func knockback():
+	accelVector = -10
 
-func unassign():
-	assigned = false
-	rally = nest
-	
-	get_parent().remove_child(self)
-	freeAnts.add_child(self)
+func die():
+	if rally.has_method("removeAnt"):
+		rally.removeAnt(self, true)
+	$Sprite2D.texture = dead
+	var tween = create_tween()
+	tween.tween_property($Sprite2D, "modulate", Color(1.0, 1.0, 1.0, 0.0), 1)
+	await tween.finished
+	queue_free()
+
+func damage():
+	hp -= 1
+	knockback()
+
+func updateTarget() -> void:
+	reachedTarget = false
+	pickTarget(rally)
 
 func assign(r: Node):
 	assigned = true
 	rally = r
-	get_parent().remove_child(self)
-	ants.add_child(self)
+
+func unassign():
+	assigned = false
+	rally = nest
+	reachedTarget = false
+
+func pickTarget(rally: Node):
+	var clamp: Vector2 = Vector2(32, 32)
+	var res: Vector2 = Vector2(1280, 720)
+	var minRange: int = 64
+	
+	var dir = randi_range(0, 359)
+	dir = Vector2(cos(deg_to_rad(dir)), sin(deg_to_rad(dir)))
+	dir *= randi_range(rally.minRad, rally.rad)
+	if "position" in rally:
+		target = dir + rally.position
+	else:
+		target = dir + rally.get_parent().position
 
 func move(dt: float):
 	var angle = position.angle_to_point(target)
 	rotation = lerp_angle(rotation, angle, 0.2)
 	if angle - rotation < 0.005 and angle - rotation > -0.05:
 		rotation = angle
-	accelVector = lerp(accelVector, 1.0, 0.05)
+	accelVector = lerp(accelVector, 1.0, 0.3)
 	if 1 - accelVector < 0.05:
 		accelVector = 1
 	
@@ -69,37 +76,31 @@ func move(dt: float):
 
 	move_and_slide()
 
-func pickTarget(rally: Node):
-	var clamp: Vector2 = Vector2(32, 32)
-	var res: Vector2 = Vector2(1280, 720)
-	var minRange: int = 64
-	
-	var dir = randi_range(0, 359)
-	dir = Vector2(cos(deg_to_rad(dir)), sin(deg_to_rad(dir)))
-	dir *= randi_range(rally.minRad, rally.rad)
-	if assigned:
-		target = dir + rally.get_parent().position
-	else:
-		target = dir + rally.position
-	if target.x > res.x - clamp.x:
-		target.x = res.x - clamp.x
-	elif target.x < 0 + clamp.x:
-		target.x = clamp.x
-	
-	if target.y > res.y - clamp.y:
-		target.y = res.y - clamp.y
-	elif target.y < 0 + clamp.y:
-		target.y = clamp.y
-		
-	accelVector = 0.0
-
 func _ready() -> void:
+	#nest.rallyModule.addAnt(self)
+	#assign(nest)
 	pickTarget(rally)
 
+func process() -> void:
+	pass
+
 func _process(delta: float) -> void:
-	move(delta)
+	if hp >0:
+		move(delta)
+		
+		if eTargets.size() > 0:
+			if eTargets[0]:
+				reachedTarget = false
+				target = eTargets[0].position
+			else:
+				eTargets.remove_at(0)
+	
+	if hp <= 0:
+		die()
+		
+	process()
 
 func _on_move_timer_timeout() -> void:
-	if reachedTarget and state == STATES.IDLE:
-		reachedTarget = false
-		pickTarget(rally)
+	if reachedTarget and rally:
+		updateTarget()
+	$MoveTimer.start(randf_range(0.5, 2))

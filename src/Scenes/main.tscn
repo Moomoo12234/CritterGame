@@ -1,30 +1,199 @@
-[gd_scene load_steps=5 format=3 uid="uid://000mnlm4usd0"]
+[gd_scene load_steps=13 format=3 uid="uid://000mnlm4usd0"]
 
+[ext_resource type="Script" uid="uid://bvsy2i1anfr5i" path="res://src/Scripts/main.gd" id="1_0dd57"]
 [ext_resource type="Texture2D" uid="uid://wlo1euh3b6yk" path="res://src/Sprites/BG.png" id="1_2av6j"]
 [ext_resource type="PackedScene" uid="uid://tt4hmqejefi" path="res://src/Scenes/rally_point.tscn" id="3_7j17x"]
 [ext_resource type="PackedScene" uid="uid://d4ik23ij30ue7" path="res://src/Scenes/nest.tscn" id="4_7j17x"]
 [ext_resource type="PackedScene" uid="uid://ktynuufwlole" path="res://src/Scenes/hole.tscn" id="4_h6v6y"]
+[ext_resource type="Script" uid="uid://bbu7cc1ijloek" path="res://src/Scripts/camera_2d.gd" id="5_h6v6y"]
+[ext_resource type="PackedScene" uid="uid://o3nd7glkhg8l" path="res://src/Scenes/enemy_nest.tscn" id="7_1dkgf"]
+[ext_resource type="Texture2D" uid="uid://brvpw4mwq6sqw" path="res://src/Sprites/RallyBtn.png" id="7_4vboo"]
+[ext_resource type="PackedScene" uid="uid://bmbwywh8gixyr" path="res://src/Scenes/ant.tscn" id="7_vdiyp"]
+[ext_resource type="PackedScene" uid="uid://cavtimjsqchf1" path="res://src/Scenes/enemy_ant.tscn" id="8_vdiyp"]
+[ext_resource type="PackedScene" uid="uid://cx8chjfirpnvt" path="res://src/Scenes/juice.tscn" id="8_vgwx1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4vboo"]
+bg_color = Color(0, 0, 0, 0.196078)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.960784, 0.835294, 0.737255, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 16.0
+expand_margin_top = 16.0
+expand_margin_right = 16.0
+expand_margin_bottom = 16.0
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_0dd57")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(640, 360)
-texture = ExtResource("1_2av6j")
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_speed = 30.0
+editor_draw_limits = true
+script = ExtResource("5_h6v6y")
 
-[node name="Rally Point" parent="." node_paths=PackedStringArray("freeAnts") instance=ExtResource("3_7j17x")]
+[node name="AudioListener2D" type="AudioListener2D" parent="Camera2D"]
+
+[node name="Holes" type="Node2D" parent="."]
+
+[node name="Hole" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(298, 690)
+
+[node name="Hole2" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-320, 675)
+
+[node name="Hole3" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-254, -159)
+
+[node name="Hole4" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(542, -30)
+
+[node name="Hole5" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(156, -232)
+
+[node name="Hole6" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-563, 218)
+
+[node name="Hole7" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(948, 683)
+
+[node name="Hole8" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(746, 109)
+
+[node name="Hole9" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(128, 94)
+
+[node name="Hole10" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(194, -740)
+
+[node name="Hole11" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(990, -611)
+
+[node name="Hole12" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(604, -813)
+
+[node name="Hole13" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-115, -363)
+
+[node name="Hole14" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(1396, 102)
+
+[node name="Hole15" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-792, 42)
+
+[node name="Hole16" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-1486, 163)
+
+[node name="Hole17" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(647, 1083)
+
+[node name="Hole18" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-624, -542)
+
+[node name="Hole19" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-1010, -744)
+
+[node name="Hole20" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-991, -208)
+
+[node name="Hole21" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-218, 171)
+
+[node name="Hole22" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-287, -817)
+
+[node name="Hole23" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(1541, -266)
+
+[node name="Hole24" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(1612, 593)
+
+[node name="Hole25" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-857, 621)
+
+[node name="Hole26" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-1182, 1015)
+
+[node name="Hole27" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-1517, -334)
+
+[node name="Hole28" parent="Holes" instance=ExtResource("4_h6v6y")]
+position = Vector2(-451, 1334)
+
+[node name="Rallys" type="Node2D" parent="."]
+
+[node name="Rally Point" parent="Rallys" instance=ExtResource("3_7j17x")]
 position = Vector2(543, 221)
-freeAnts = NodePath("../FreeAnts")
-
-[node name="FreeAnts" type="Node2D" parent="."]
 
 [node name="Ants" type="Node2D" parent="."]
 
-[node name="Nest" parent="." node_paths=PackedStringArray("freeAnts", "ants") instance=ExtResource("4_7j17x")]
+[node name="Nest" parent="." node_paths=PackedStringArray("ants", "holes", "rallys") instance=ExtResource("4_7j17x")]
 position = Vector2(126, 300)
-maxAnts = 1
-freeAnts = NodePath("../FreeAnts")
+ant = ExtResource("7_vdiyp")
+maxAnts = 100
+antCost = 1
 ants = NodePath("../Ants")
+holes = NodePath("../Holes")
+rallys = NodePath("../Rallys")
 
-[node name="Hole" parent="." node_paths=PackedStringArray("freeAnts") instance=ExtResource("4_h6v6y")]
-position = Vector2(241, 591)
-freeAnts = NodePath("../FreeAnts")
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="CanvasLayer/UI"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "z"
+
+[node name="Hotbar" type="Control" parent="CanvasLayer/UI"]
+anchors_preset = 0
+offset_left = 608.0
+offset_top = 640.0
+offset_right = 672.0
+offset_bottom = 704.0
+
+[node name="Panel" type="Panel" parent="CanvasLayer/UI/Hotbar"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vboo")
+
+[node name="RallyBtn" type="TextureButton" parent="CanvasLayer/UI/Hotbar"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 48.0
+offset_bottom = 48.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(16, 16)
+texture_normal = ExtResource("7_4vboo")
+stretch_mode = 4
+
+[node name="Juice" parent="CanvasLayer/UI/Hotbar/RallyBtn" instance=ExtResource("8_vgwx1")]
+scaleFactor = 2.2
+hoverSound = true
+
+[node name="BG" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="BG" type="Sprite2D" parent="BG"]
+z_index = -1
+position = Vector2(640, 360)
+texture = ExtResource("1_2av6j")
+metadata/_edit_lock_ = true
+
+[node name="EnemyNest" parent="." node_paths=PackedStringArray("antsContainer", "playerNest") instance=ExtResource("7_1dkgf")]
+position = Vector2(407, 559)
+ant = ExtResource("8_vdiyp")
+hp = 5
+antsContainer = NodePath("../Ants")
+playerNest = NodePath("../Nest")

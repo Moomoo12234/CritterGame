@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://cavtimjsqchf1"]
+
+[ext_resource type="Script" uid="uid://cd62bxki4c63j" path="res://src/Scripts/enemy_ant.gd" id="1_11swx"]
+[ext_resource type="Texture2D" uid="uid://d3dbpfgqb5iyv" path="res://src/Sprites/EnemyAnt.png" id="2_11swx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ocbbg"]
+size = Vector2(14, 8)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_11swx"]
+radius = 64.0
+
+[node name="EnemyAnt" type="CharacterBody2D" groups=["Enemy ant"]]
+script = ExtResource("1_11swx")
+speed = 2000
+moveRange = 128
+hp = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("2_11swx")
+
+[node name="Area2D" type="Area2D" parent="." groups=["Enemy ant"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-1, 0)
+shape = SubResource("RectangleShape2D_ocbbg")
+
+[node name="MoveTimer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="Range" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Range"]
+shape = SubResource("CircleShape2D_11swx")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
+[connection signal="area_entered" from="Range" to="." method="_on_range_area_entered"]

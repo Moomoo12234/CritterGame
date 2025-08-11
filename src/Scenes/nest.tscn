@@ -1,15 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4ik23ij30ue7"]
+[gd_scene load_steps=4 format=3 uid="uid://d4ik23ij30ue7"]
 
 [ext_resource type="Texture2D" uid="uid://biomkb78twpyw" path="res://src/Sprites/Nest.png" id="1_4hjx4"]
-[ext_resource type="Script" uid="uid://d0ewb3v7xo10s" path="res://src/Scripts/nest.gd" id="1_qun6b"]
-[ext_resource type="PackedScene" uid="uid://bmbwywh8gixyr" path="res://src/Scenes/ant.tscn" id="2_3p8or"]
+[ext_resource type="Script" uid="uid://cfmb84tmymnqv" path="res://src/Scripts/nest.gd" id="1_qun6b"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qun6b"]
 radius = 25.0
 
 [node name="Nest" type="Node2D"]
 script = ExtResource("1_qun6b")
-ant = ExtResource("2_3p8or")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -17,17 +15,19 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_4hjx4")
 
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_left = -20.0
 offset_top = 25.0
 offset_right = 20.0
 offset_bottom = 48.0
 text = "1/10"
+horizontal_alignment = 1
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 2.0
 autostart = true
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." groups=["Nest"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_qun6b")

@@ -1,20 +1,46 @@
-[gd_scene load_steps=6 format=3 uid="uid://tt4hmqejefi"]
+[gd_scene load_steps=10 format=3 uid="uid://tt4hmqejefi"]
 
 [ext_resource type="Script" uid="uid://wjm8jim2cbm4" path="res://src/Scripts/rally_point.gd" id="1_g6p55"]
 [ext_resource type="Texture2D" uid="uid://h2cc1phfq04p" path="res://src/Sprites/RallyPoint.png" id="2_grskp"]
 [ext_resource type="PackedScene" uid="uid://dstqdmgnqm35v" path="res://src/Scenes/hover_module.tscn" id="3_grskp"]
+[ext_resource type="Texture2D" uid="uid://c0vrdokg57a4f" path="res://src/Sprites/Plus.png" id="3_r7gky"]
+[ext_resource type="PackedScene" uid="uid://cx8chjfirpnvt" path="res://src/Scenes/juice.tscn" id="4_ojve5"]
 [ext_resource type="PackedScene" uid="uid://01uxvosjg14a" path="res://src/Scenes/rally_module.tscn" id="4_ss6ni"]
+[ext_resource type="Texture2D" uid="uid://cc6k3hkdxnum7" path="res://src/Sprites/Minus.png" id="5_s51br"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ss6ni"]
-radius = 65.123
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r7gky"]
+size = Vector2(128, 98)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ojve5"]
+radius = 63.0
 
 [node name="Rally Point" type="Node2D"]
 script = ExtResource("1_g6p55")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="TextureButton" parent="."]
 texture_filter = 1
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
 scale = Vector2(2, 2)
-texture = ExtResource("2_grskp")
+pivot_offset = Vector2(32, 32)
+texture_normal = ExtResource("2_grskp")
+
+[node name="Juice" parent="Sprite2D" instance=ExtResource("4_ojve5")]
+scaleFactor = 2.2
+clickJuice = true
+hoverSound = false
+rotJuice = false
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 39)
+shape = SubResource("RectangleShape2D_r7gky")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ojve5")
 
 [node name="Label" type="Label" parent="."]
 offset_left = -20.0
@@ -24,14 +50,44 @@ offset_bottom = 88.0
 text = "1/10"
 horizontal_alignment = 1
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Plus" type="TextureButton" parent="Label"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 38.0
+offset_top = 3.0
+offset_right = 54.0
+offset_bottom = 19.0
+pivot_offset = Vector2(8, 8)
+texture_normal = ExtResource("3_r7gky")
+stretch_mode = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_ss6ni")
+[node name="Juice" parent="Label/Plus" instance=ExtResource("4_ojve5")]
+scaleFactor = 1.2
+delay = 0.1
+clickJuice = true
+
+[node name="Minus" type="TextureButton" parent="Label"]
+texture_filter = 1
+layout_mode = 0
+offset_left = -14.0
+offset_top = 3.0
+offset_right = 2.0
+offset_bottom = 19.0
+pivot_offset = Vector2(8, 8)
+texture_normal = ExtResource("5_s51br")
+stretch_mode = 4
+
+[node name="Juice" parent="Label/Minus" instance=ExtResource("4_ojve5")]
+scaleFactor = 1.2
+delay = 0.1
+clickJuice = true
 
 [node name="HoverModule" parent="." node_paths=PackedStringArray("area") instance=ExtResource("3_grskp")]
 area = NodePath("../Area2D")
+rangeHover = true
 
-[node name="RallyModule" parent="." node_paths=PackedStringArray("HoverModule", "lbl") instance=ExtResource("4_ss6ni")]
+[node name="RallyModule" parent="." node_paths=PackedStringArray("HoverModule", "lbl", "minus", "plus") instance=ExtResource("4_ss6ni")]
 HoverModule = NodePath("../HoverModule")
 lbl = NodePath("../Label")
+minus = NodePath("../Label/Minus")
+plus = NodePath("../Label/Plus")

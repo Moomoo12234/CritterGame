@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://o3nd7glkhg8l"]
+
+[ext_resource type="Script" uid="uid://d0ewb3v7xo10s" path="res://src/Scripts/enemy_nest.gd" id="1_78lnq"]
+[ext_resource type="PackedScene" uid="uid://01uxvosjg14a" path="res://src/Scenes/rally_module.tscn" id="3_0hebw"]
+[ext_resource type="Texture2D" uid="uid://biomkb78twpyw" path="res://src/Sprites/Nest.png" id="3_u64tu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qun6b"]
+radius = 25.0
+
+[node name="EnemyNest" type="Node2D" node_paths=PackedStringArray("rallyModule")]
+script = ExtResource("1_78lnq")
+maxAnts = 25
+waveAmount = 2
+rallyModule = NodePath("RallyModule")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("3_u64tu")
+
+[node name="SpawnTimer" type="Timer" parent="."]
+
+[node name="Area2D" type="Area2D" parent="." groups=["Enemy nest"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_qun6b")
+
+[node name="RallyModule" parent="." instance=ExtResource("3_0hebw")]
+enemy = true
+
+[node name="SpawnDelay" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_timer_timeout"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="timeout" from="SpawnDelay" to="." method="_on_spawn_delay_timeout"]
