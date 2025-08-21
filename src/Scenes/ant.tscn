@@ -1,22 +1,63 @@
-[gd_scene load_steps=8 format=3 uid="uid://bmbwywh8gixyr"]
+[gd_scene load_steps=15 format=3 uid="uid://bmbwywh8gixyr"]
 
 [ext_resource type="Script" uid="uid://mj7rfdifhirt" path="res://src/Scripts/friendly_ant.gd" id="1_p7xjd"]
 [ext_resource type="Texture2D" uid="uid://dp1lg0hvlim0a" path="res://src/Sprites/FriendlyAnt.png" id="1_txt7p"]
 [ext_resource type="Texture2D" uid="uid://dhmpq2r0tk235" path="res://src/Sprites/FriendlyAntFull.png" id="3_prmu5"]
 [ext_resource type="Texture2D" uid="uid://dd70dyd128t6f" path="res://src/Sprites/DeadAnt.png" id="4_ocbbg"]
 [ext_resource type="AudioStream" uid="uid://mvv22qqsmai6" path="res://src/Sounds/hit.wav" id="5_l7nud"]
+[ext_resource type="AudioStream" uid="uid://b02xstfh2fmm0" path="res://src/Sounds/food.wav" id="6_y7nhq"]
+[ext_resource type="Texture2D" uid="uid://77ddloer0h80" path="res://src/Sprites/Pixel.png" id="7_rm6n4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ocbbg"]
-size = Vector2(18, 12)
+size = Vector2(14, 8)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_prmu5"]
 radius = 64.0
 
-[node name="Ant" type="CharacterBody2D"]
+[sub_resource type="Curve" id="Curve_r0o7m"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -7.55712, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rm6n4"]
+curve = SubResource("Curve_r0o7m")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2efi3"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_rm6n4")
+
+[sub_resource type="Animation" id="Animation_qvmmc"]
+resource_name = "food"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 0.5, 2),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(2.75, 2.75), Vector2(2, 2)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_34llv"]
+_data = {
+&"food": SubResource("Animation_qvmmc")
+}
+
+[node name="Ant" type="CharacterBody2D" node_paths=PackedStringArray("navigation2D")]
 script = ExtResource("1_p7xjd")
 empty = ExtResource("1_txt7p")
 full = ExtResource("3_prmu5")
 dead = ExtResource("4_ocbbg")
+navigation2D = NodePath("NavigationAgent2D")
 speed = 5000
 moveRange = 128
 hp = 2
@@ -28,15 +69,16 @@ texture = ExtResource("1_txt7p")
 
 [node name="MoveTimer" type="Timer" parent="."]
 one_shot = true
-autostart = true
 
 [node name="Area2D" type="Area2D" parent="." groups=["Ant"]]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(-1, 0)
 shape = SubResource("RectangleShape2D_ocbbg")
 
 [node name="Range" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Range"]
 shape = SubResource("CircleShape2D_prmu5")
@@ -44,6 +86,34 @@ shape = SubResource("CircleShape2D_prmu5")
 [node name="Hit" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_l7nud")
 volume_db = -20.0
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 7.0
+target_desired_distance = 8.0
+simplify_path = true
+simplify_epsilon = 10.0
+debug_use_custom = true
+
+[node name="Food" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_y7nhq")
+volume_db = -25.0
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+modulate = Color(0.760784, 0.635294, 0.537255, 1)
+position = Vector2(6, 0)
+emitting = false
+amount = 10
+texture = ExtResource("7_rm6n4")
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_2efi3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_34llv")
+}
 
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

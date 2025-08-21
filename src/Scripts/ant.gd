@@ -5,15 +5,19 @@ class_name ant
 
 @export var nest: Node2D
 
+@export var navigation2D: NavigationAgent2D
+
 @export var speed: int
 @export var moveRange: int
 @export var hp: int = 1
 @export var rally: Node
 
-var target: Vector2
 var accelVector: float = 1
 var assigned: bool = false
 var reachedTarget: bool = false
+var combat: bool = false
+
+var prevTarget: Vector2
 
 var eTargets = []
 
@@ -21,8 +25,9 @@ func knockback():
 	accelVector = -10
 
 func die():
-	if rally.has_method("removeAnt"):
-		rally.removeAnt(self, true)
+	if rally:
+		if rally.has_method("removeAnt"):
+			rally.removeAnt(self, true)
 	$Sprite2D.texture = dead
 	var tween = create_tween()
 	tween.tween_property($Sprite2D, "modulate", Color(1.0, 1.0, 1.0, 0.0), 1)
@@ -35,7 +40,10 @@ func damage():
 
 func updateTarget() -> void:
 	reachedTarget = false
-	pickTarget(rally)
+	if rally:
+		pickTarget(rally)
+	else:
+		unassign()
 
 func assign(r: Node):
 	assigned = true
@@ -55,52 +63,84 @@ func pickTarget(rally: Node):
 	dir = Vector2(cos(deg_to_rad(dir)), sin(deg_to_rad(dir)))
 	dir *= randi_range(rally.minRad, rally.rad)
 	if "position" in rally:
-		target = dir + rally.position
+		navigation2D.target_position = dir + rally.position
 	else:
-		target = dir + rally.get_parent().position
+		navigation2D.target_position = dir + rally.get_parent().position
 
 func move(dt: float):
-	var angle = position.angle_to_point(target)
-	rotation = lerp_angle(rotation, angle, 0.2)
-	if angle - rotation < 0.005 and angle - rotation > -0.05:
-		rotation = angle
-	accelVector = lerp(accelVector, 1.0, 0.3)
+	#var angle = position.angle_to_point(target)
+	#var angle = position.angle_to_point(navigation2D.get_next_path_position())
+	#rotation = lerp_angle(rotation, angle, 0.2)
+	#if angle - rotation < 0.005 and angle - rotation > -0.05:
+	#	rotation = angle
+	#accelVector = lerp(accelVector, 1.0, 0.3)
+	#if 1 - accelVector < 0.05:
+	#	accelVector = 1
+	#true
+	#var dir = Vector2(cos(rotation), sin(rotation))
+	#velocity = dir * speed * dt * accelVector
+	#if position.distance_to(navigation2D.targ) < 8:
+		#velocity = Vector2(0, 0)
+	#reachedTarget = navigation2D.is_target_reached()
+	
+	#look_at(navigation2D.get_next_path_position())
+	rotation = lerp_angle(rotation, position.angle_to_point(navigation2D.get_next_path_position()), 10.0* dt)
+	
+	accelVector = lerp(accelVector, 1.0,  10.0 * dt)
 	if 1 - accelVector < 0.05:
 		accelVector = 1
 	
 	var dir = Vector2(cos(rotation), sin(rotation))
 	velocity = dir * speed * dt * accelVector
-	if position.distance_to(target) < 8:
+	
+	if navigation2D.is_target_reached():
+		#print("bussin")
 		velocity = Vector2(0, 0)
 		reachedTarget = true
-
+	
 	move_and_slide()
 
 func _ready() -> void:
 	#nest.rallyModule.addAnt(self)
 	#assign(nest)
 	pickTarget(rally)
+	$MoveTimer.start(randf_range(0.5, 1.5))
+	
+	nest.connect("die", die)
 
 func process() -> void:
 	pass
 
 func _process(delta: float) -> void:
-	if hp >0:
+	if hp >0 and not Globals.paused:
 		move(delta)
 		
 		if eTargets.size() > 0:
+			
+			prevTarget = navigation2D.target_position
 			if eTargets[0]:
 				reachedTarget = false
-				target = eTargets[0].position
+				navigation2D.target_position = eTargets[0].position
 			else:
 				eTargets.remove_at(0)
 	
 	if hp <= 0:
 		die()
-		
+	
+	#print("target", navigation2D.target_position)
+	#print("pos", position)
+	
 	process()
 
 func _on_move_timer_timeout() -> void:
-	if reachedTarget and rally:
-		updateTarget()
-	$MoveTimer.start(randf_range(0.5, 2))
+	if not Globals.paused:
+		if not nest:
+			die()
+
+		if reachedTarget and rally or not navigation2D.is_target_reachable():
+			if combat and prevTarget:
+				navigation2D.target_position = prevTarget
+				combat = false
+			else:
+				updateTarget()
+	$MoveTimer.start(randf_range(0.5, 1.5))

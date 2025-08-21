@@ -9,8 +9,9 @@ extends Node
 @export var clickJuice: bool = false
 @export var hoverSound: bool = true
 @export var rotJuice: bool = true
+@export var input_dependant: bool = true
 
-func pressed() -> void:
+func click() -> void:
 	if clickJuice:
 		var tween = create_tween().set_parallel().set_trans(Tween.TRANS_QUAD)
 		tween.tween_property(parent ,"scale", Vector2(scaleFactor + 0.2, scaleFactor + 0.2), delay).set_ease(Tween.EASE_OUT)
@@ -19,7 +20,13 @@ func pressed() -> void:
 			$Click.pitch_scale = randf_range(1.0, 1.1)
 			$Click.play()
 
-func mouse_entered() -> void:
+func hover_small() -> void:
+	var tween = create_tween().parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(parent, "scale", Vector2(scale.x, scale.y), delay)
+	if rotJuice:
+		tween.tween_property(parent, "rotation", 0, delay)
+
+func hoverBig() -> void:
 	var tween = create_tween().parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(parent, "scale", Vector2(scaleFactor, scaleFactor), delay)
 	if rotJuice:
@@ -30,11 +37,26 @@ func mouse_entered() -> void:
 		$Hover.pitch_scale = randf_range(0.9, 1)
 		$Hover.play()
 
+func pressed() -> void:
+	if input_dependant:
+		if Globals.input_enabled:
+			click()
+	else:
+		click()
+
+func mouse_entered() -> void:
+	if input_dependant:
+		if Globals.input_enabled:
+			hoverBig()
+	else:
+		hoverBig()
+
 func mouse_exited() -> void:
-	var tween = create_tween().parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.tween_property(parent, "scale", Vector2(scale.x, scale.y), delay)
-	if rotJuice:
-		tween.tween_property(parent, "rotation", 0, delay)
+	if input_dependant:
+		if Globals.input_enabled:
+			hover_small()
+	else:
+		hover_small()
 	#parent.scale = Vector2(1, 1)
 	#parent.rotation += deg_to_rad(2 * scaleFactor)
 

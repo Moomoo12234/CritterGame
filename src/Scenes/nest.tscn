@@ -1,18 +1,113 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4ik23ij30ue7"]
+[gd_scene load_steps=18 format=3 uid="uid://d4ik23ij30ue7"]
 
 [ext_resource type="Texture2D" uid="uid://biomkb78twpyw" path="res://src/Sprites/Nest.png" id="1_4hjx4"]
 [ext_resource type="Script" uid="uid://cfmb84tmymnqv" path="res://src/Scripts/nest.gd" id="1_qun6b"]
+[ext_resource type="Texture2D" uid="uid://77ddloer0h80" path="res://src/Sprites/Pixel.png" id="2_mdnkx"]
+[ext_resource type="AudioStream" uid="uid://mvv22qqsmai6" path="res://src/Sounds/hit.wav" id="4_3p8or"]
+[ext_resource type="AudioStream" uid="uid://cef6ul2r5icpp" path="res://src/Sounds/spawn.wav" id="4_mdnkx"]
+[ext_resource type="PackedScene" uid="uid://cx8chjfirpnvt" path="res://src/Scenes/juice.tscn" id="4_vd63n"]
+
+[sub_resource type="Curve" id="Curve_vd63n"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -7.55712, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rm6n4"]
+curve = SubResource("Curve_vd63n")
+
+[sub_resource type="Curve" id="Curve_wnkr7"]
+_limits = [0.0, 196.887, 0.0, 1.0]
+_data = [Vector2(0, 100), 1.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wsalc"]
+curve = SubResource("Curve_wnkr7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lgebi"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+velocity_limit_curve = SubResource("CurveTexture_wsalc")
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_rm6n4")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qun6b"]
 radius = 25.0
 
+[sub_resource type="Animation" id="Animation_mdnkx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_3p8or"]
+resource_name = "Spawn"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.191667),
+"transitions": PackedFloat32Array(1, 0.5, 2),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(2.3, 2.3), Vector2(2, 2)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vd63n"]
+_data = {
+&"RESET": SubResource("Animation_mdnkx"),
+&"Spawn": SubResource("Animation_3p8or")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mdnkx"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vd63n"]
+bg_color = Color(0.960784, 0.835294, 0.737255, 1)
+
 [node name="Nest" type="Node2D"]
 script = ExtResource("1_qun6b")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+modulate = Color(0.760784, 0.635294, 0.537255, 1)
+emitting = false
+amount = 10
+texture = ExtResource("2_mdnkx")
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_lgebi")
+
+[node name="Sprite2D" type="TextureButton" parent="."]
 texture_filter = 1
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
 scale = Vector2(2, 2)
-texture = ExtResource("1_4hjx4")
+pivot_offset = Vector2(12, 12)
+texture_normal = ExtResource("1_4hjx4")
+
+[node name="Juice" parent="Sprite2D" instance=ExtResource("4_vd63n")]
+scaleFactor = 2.3
+clickJuice = false
+rotJuice = false
 
 [node name="Label" type="Label" parent="."]
 visible = false
@@ -24,13 +119,40 @@ text = "1/10"
 horizontal_alignment = 1
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 2.0
 autostart = true
 
 [node name="Area2D" type="Area2D" parent="." groups=["Nest"]]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_qun6b")
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_vd63n")
+}
+
+[node name="Spawn" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_mdnkx")
+volume_db = -20.0
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_3p8or")
+volume_db = -20.0
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+visible = false
+offset_left = -35.0
+offset_top = 30.0
+offset_right = 35.0
+offset_bottom = 35.0
+theme_override_styles/background = SubResource("StyleBoxFlat_mdnkx")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vd63n")
+max_value = 5.0
+value = 5.0
+show_percentage = false
+
+[connection signal="mouse_entered" from="Sprite2D" to="." method="_on_sprite_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Sprite2D" to="." method="_on_sprite_2d_mouse_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

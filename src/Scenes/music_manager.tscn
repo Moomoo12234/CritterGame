@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://ns32x2o1g2td"]
+
+[ext_resource type="AudioStream" uid="uid://dc6w5encxb1ow" path="res://src/Sounds/Quincas Moreira - Robot City.mp3" id="1_gulap"]
+
+[sub_resource type="GDScript" id="GDScript_eyssc"]
+script/source = "extends Node
+
+@onready var tracks: Array = get_children()
+var track: int = 0
+
+func finish() -> void:
+	track += 1
+	if track > tracks.size():
+		track = 0
+	tracks[track].play()
+
+func _ready() -> void:
+	tracks[track].play()
+	#for i in tracks:
+	#	i.connect(\"finished\", finish)
+
+
+func _on_audio_stream_player_finished() -> void:
+	$AudioStreamPlayer.play()
+"
+
+[node name="MusicManager" type="Node"]
+script = SubResource("GDScript_eyssc")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_gulap")
+volume_db = -20.0
+playback_type = 1
+
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

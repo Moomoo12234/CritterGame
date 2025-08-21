@@ -1,24 +1,45 @@
-[gd_scene load_steps=5 format=3 uid="uid://o3nd7glkhg8l"]
+[gd_scene load_steps=10 format=3 uid="uid://o3nd7glkhg8l"]
 
 [ext_resource type="Script" uid="uid://d0ewb3v7xo10s" path="res://src/Scripts/enemy_nest.gd" id="1_78lnq"]
+[ext_resource type="PackedScene" uid="uid://cavtimjsqchf1" path="res://src/Scenes/enemy_ant.tscn" id="2_q6u6t"]
 [ext_resource type="PackedScene" uid="uid://01uxvosjg14a" path="res://src/Scenes/rally_module.tscn" id="3_0hebw"]
 [ext_resource type="Texture2D" uid="uid://biomkb78twpyw" path="res://src/Sprites/Nest.png" id="3_u64tu"]
+[ext_resource type="PackedScene" uid="uid://cx8chjfirpnvt" path="res://src/Scenes/juice.tscn" id="4_etulu"]
+[ext_resource type="AudioStream" uid="uid://mvv22qqsmai6" path="res://src/Sounds/hit.wav" id="5_u64tu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qun6b"]
 radius = 25.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wtfqi"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lx0rb"]
+bg_color = Color(0.960784, 0.835294, 0.737255, 1)
+
 [node name="EnemyNest" type="Node2D" node_paths=PackedStringArray("rallyModule")]
 script = ExtResource("1_78lnq")
-maxAnts = 25
-waveAmount = 2
+ant = ExtResource("2_q6u6t")
+guard_amnt = 10
+hp = 20
 rallyModule = NodePath("RallyModule")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="TextureButton" parent="."]
 texture_filter = 1
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
 scale = Vector2(2, 2)
-texture = ExtResource("3_u64tu")
+pivot_offset = Vector2(12, 12)
+texture_normal = ExtResource("3_u64tu")
+
+[node name="Juice" parent="Sprite2D" instance=ExtResource("4_etulu")]
+scaleFactor = 2.3
+clickJuice = false
+rotJuice = false
 
 [node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 8.0
 
 [node name="Area2D" type="Area2D" parent="." groups=["Enemy nest"]]
 
@@ -29,9 +50,27 @@ shape = SubResource("CircleShape2D_qun6b")
 enemy = true
 
 [node name="SpawnDelay" type="Timer" parent="."]
-wait_time = 10.0
+one_shot = true
 autostart = true
 
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_u64tu")
+volume_db = -20.0
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+visible = false
+offset_left = -35.0
+offset_top = 30.0
+offset_right = 35.0
+offset_bottom = 35.0
+theme_override_styles/background = SubResource("StyleBoxFlat_wtfqi")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lx0rb")
+max_value = 5.0
+value = 5.0
+show_percentage = false
+
+[connection signal="mouse_entered" from="Sprite2D" to="." method="_on_sprite_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Sprite2D" to="." method="_on_sprite_2d_mouse_exited"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_timer_timeout"]
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="timeout" from="SpawnDelay" to="." method="_on_spawn_delay_timeout"]

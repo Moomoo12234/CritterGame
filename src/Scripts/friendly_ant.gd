@@ -10,25 +10,31 @@ var rallys: Node2D
 
 var hasFood: bool = false
 
+func foodJuice() -> void:
+	$Food.pitch_scale = randf_range(0.9, 1)
+	$Food.play()
+	$GPUParticles2D.restart()
+	$AnimationPlayer.play("food")
+
 func hurt(ant: CharacterBody2D):
 	ant.damage()
 
 func damage():
 	hp -= 1
-	accelVector = -2
+	knockback()
 	$Hit.pitch_scale = randf_range(0.9, 1.1)
 	$Hit.play()
 
 func lookForJob() -> void:
+	for i in rallys.get_children():
+		if i.rallyModule.assignedAntsNum > i.rallyModule.assignedAnts.size() and i.rallyModule.assignable:
+			i.rallyModule.addAnt(self)
+			assign(i.rallyModule)
+			break
+	
 	if not assigned:
-		for i in rallys.get_children():
-			if i.rallyModule.antsNeeded > 0:
-				i.rallyModule.addAnt(self)
-				assign(i.rallyModule)
-				break
-			
 		for i in holes.get_children():
-			if i.rallyModule.antsNeeded > 0:
+			if i.rallyModule.assignedAntsNum > i.rallyModule.assignedAnts.size() and i.rallyModule.assignable:
 				i.rallyModule.addAnt(self)
 				assign(i.rallyModule)
 				break
@@ -40,15 +46,23 @@ func deliverFood() -> void:
 	else:
 		unassign()
 	hasFood = false
+	foodJuice()
 
 func collectFood():
 	$Sprite2D.texture = full
-	target = nest.position
+	navigation2D.target_position = nest.position
 	hasFood = true
+	foodJuice()
+
+#func move(dt) -> void:
+#	pass
 
 func process() -> void:
-	if not assigned:
+	if not assigned and not hasFood:
 			lookForJob()
+	elif hasFood:
+		navigation2D.target_position = nest.position
+		reachedTarget = false
 	if not rally:
 		unassign()
 
@@ -62,8 +76,8 @@ func _on_range_area_exited(area: Area2D) -> void:
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	if hp > 0:
-		if area.is_in_group("Enemy ant"):
-			hurt(area.get_parent())
+		if area.is_in_group("Enemy ant") and area.get_parent().hp > 0:
+			area.get_parent().damage()
 			damage()
 		if area.is_in_group("Enemy nest"):
 			area.get_parent().damage()

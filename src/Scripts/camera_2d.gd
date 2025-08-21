@@ -3,8 +3,13 @@ extends Camera2D
 var mouse_down: bool = false
 var last_mouse_pos: Vector2
 
-func _process(delta: float) -> void:
-	
+var disabled: bool = false
+
+func camera_movement():
+	var offs = last_mouse_pos - get_global_mouse_position()
+	offset += offs
+
+func controls() -> void:
 	if Input.is_action_just_released("Scrollup"):
 		last_mouse_pos = get_global_mouse_position()
 		var zoom_amount = Vector2.ONE / 10
@@ -24,7 +29,7 @@ func _process(delta: float) -> void:
 		mouse_down = false
 	if mouse_down:
 		camera_movement()
-func camera_movement(x: int = 1):
-	var offs = last_mouse_pos - get_global_mouse_position()
-	offset += offs
-#
+
+func _process(delta: float) -> void:
+	if Globals.input_enabled:
+		controls()

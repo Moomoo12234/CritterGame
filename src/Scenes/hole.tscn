@@ -1,22 +1,91 @@
-[gd_scene load_steps=12 format=3 uid="uid://ktynuufwlole"]
+[gd_scene load_steps=19 format=3 uid="uid://ktynuufwlole"]
 
 [ext_resource type="Script" uid="uid://71o2gggiqot5" path="res://src/Scripts/hole.gd" id="1_sxxd3"]
 [ext_resource type="Texture2D" uid="uid://cu7r6nir11cjp" path="res://src/Sprites/Hole1.png" id="2_7l3ct"]
 [ext_resource type="Texture2D" uid="uid://cdj1h5krjxacq" path="res://src/Sprites/Hole2.png" id="3_gpk0t"]
 [ext_resource type="Texture2D" uid="uid://dkk6te0n4ddlw" path="res://src/Sprites/Hole3.png" id="4_ktvsf"]
-[ext_resource type="Texture2D" uid="uid://cg7ajiueor61l" path="res://src/Sprites/Hole4.png" id="5_ti42a"]
+[ext_resource type="Texture2D" uid="uid://7rgst8fg7dqm" path="res://src/Sprites/Hole.png" id="5_c7pki"]
 [ext_resource type="Texture2D" uid="uid://c0vrdokg57a4f" path="res://src/Sprites/Plus.png" id="6_fyoqr"]
 [ext_resource type="PackedScene" uid="uid://dstqdmgnqm35v" path="res://src/Scenes/hover_module.tscn" id="6_gpk0t"]
 [ext_resource type="PackedScene" uid="uid://cx8chjfirpnvt" path="res://src/Scenes/juice.tscn" id="7_c7pki"]
+[ext_resource type="LabelSettings" uid="uid://b4g2ecn5spb1c" path="res://src/Resources/labelSettings.tres" id="7_h1siy"]
 [ext_resource type="PackedScene" uid="uid://01uxvosjg14a" path="res://src/Scenes/rally_module.tscn" id="7_ktvsf"]
 [ext_resource type="Texture2D" uid="uid://cc6k3hkdxnum7" path="res://src/Sprites/Minus.png" id="8_h1siy"]
+[ext_resource type="AudioStream" uid="uid://mvv22qqsmai6" path="res://src/Sounds/hit.wav" id="12_h1siy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7pki"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h1siy"]
+bg_color = Color(0.960784, 0.835294, 0.737255, 1)
+
+[sub_resource type="Animation" id="Animation_lmwko"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_h1siy"]
+resource_name = "food"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(-2, -2, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(-2, -2, 1),
+"update": 0,
+"values": [0.0, 0.0174533, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kdl3q"]
+_data = {
+&"RESET": SubResource("Animation_lmwko"),
+&"food": SubResource("Animation_h1siy")
+}
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mdbp8"]
-radius = 25.0
+radius = 24.0
 
 [node name="Hole" type="Node2D"]
 script = ExtResource("1_sxxd3")
-holeTextures = Array[Texture2D]([ExtResource("5_ti42a"), ExtResource("4_ktvsf"), ExtResource("3_gpk0t"), ExtResource("2_7l3ct")])
+holeTextures = Array[Texture2D]([ExtResource("4_ktvsf"), ExtResource("3_gpk0t"), ExtResource("2_7l3ct"), ExtResource("5_c7pki")])
 holeTextureNums = Array[int]([4, 8, 12, 16])
 food = 16.0
 maxFood = 16.0
@@ -29,56 +98,100 @@ offset_right = 12.0
 offset_bottom = 12.0
 scale = Vector2(2, 2)
 pivot_offset = Vector2(12, 12)
-texture_normal = ExtResource("2_7l3ct")
+texture_normal = ExtResource("5_c7pki")
 metadata/_edit_use_anchors_ = true
 
 [node name="Juice" parent="Sprite2D" instance=ExtResource("7_c7pki")]
 scaleFactor = 2.2
 delay = 0.1
-clickJuice = true
 rotJuice = false
 
 [node name="Label" type="Label" parent="."]
+visible = false
+texture_filter = 1
 offset_left = -20.0
 offset_top = 25.0
 offset_right = 20.0
 offset_bottom = 48.0
+label_settings = ExtResource("7_h1siy")
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Plus" type="TextureButton" parent="Label"]
+modulate = Color(0.960784, 0.835294, 0.737255, 1)
 texture_filter = 1
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.1
+anchor_top = -0.304348
+anchor_right = -0.1
+anchor_bottom = -0.304348
 offset_left = 38.0
-offset_top = 3.0
-offset_right = 54.0
-offset_bottom = 19.0
-pivot_offset = Vector2(8, 8)
+offset_top = 2.5
+offset_right = 70.0
+offset_bottom = 34.5
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(16, 16)
 texture_normal = ExtResource("6_fyoqr")
-stretch_mode = 4
+stretch_mode = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="Juice" parent="Label/Plus" instance=ExtResource("7_c7pki")]
-scaleFactor = 1.2
+scaleFactor = 0.7
 delay = 0.1
-clickJuice = true
 
 [node name="Minus" type="TextureButton" parent="Label"]
+modulate = Color(0.960784, 0.835294, 0.737255, 1)
 texture_filter = 1
-layout_mode = 0
-offset_left = -14.0
-offset_top = 3.0
-offset_right = 2.0
-offset_bottom = 19.0
-pivot_offset = Vector2(8, 8)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.275
+anchor_top = 0.0217391
+anchor_right = -0.275
+anchor_bottom = 0.0217391
+offset_left = -15.0
+offset_top = -5.0
+offset_right = 17.0
+offset_bottom = 27.0
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(16, 16)
 texture_normal = ExtResource("8_h1siy")
 stretch_mode = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="Juice" parent="Label/Minus" instance=ExtResource("7_c7pki")]
-scaleFactor = 1.2
+scaleFactor = 0.7
 delay = 0.1
-clickJuice = true
+
+[node name="FoodBar" type="ProgressBar" parent="Label"]
+layout_mode = 0
+offset_left = -17.0
+offset_top = 25.0
+offset_right = 58.0
+offset_bottom = 30.0
+pivot_offset = Vector2(37.5, 2.5)
+theme_override_styles/background = SubResource("StyleBoxFlat_c7pki")
+theme_override_styles/fill = SubResource("StyleBoxFlat_h1siy")
+max_value = 16.0
+value = 16.0
+show_percentage = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Label/FoodBar"]
+libraries = {
+&"": SubResource("AnimationLibrary_kdl3q")
+}
+
+[node name="RegendBar" type="ProgressBar" parent="Label"]
+layout_mode = 0
+offset_left = -17.0
+offset_top = 35.0
+offset_right = 58.0
+offset_bottom = 40.0
+theme_override_styles/background = SubResource("StyleBoxFlat_c7pki")
+theme_override_styles/fill = SubResource("StyleBoxFlat_h1siy")
+max_value = 5.0
+value = 5.0
+show_percentage = false
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -97,4 +210,14 @@ minus = NodePath("../Label/Minus")
 plus = NodePath("../Label/Plus")
 rad = 6
 
+[node name="RegenTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_h1siy")
+volume_db = -20.0
+
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="onSelected" from="RallyModule" to="." method="_on_rally_module_on_selected"]
+[connection signal="timeout" from="RegenTimer" to="." method="_on_regen_t_imer_timeout"]
