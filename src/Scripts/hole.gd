@@ -1,5 +1,7 @@
 extends Node2D
 
+signal selected
+
 @onready var rallyModule = $RallyModule
 
 @export var holeTextures: Array[Texture2D]
@@ -54,3 +56,6 @@ func _on_regen_t_imer_timeout() -> void:
 		food += 1
 		updateTexture()
 		$Label/FoodBar/AnimationPlayer.play("food")
+
+func _on_rally_module_on_selected() -> void:
+	emit_signal("selected")

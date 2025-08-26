@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://000mnlm4usd0"]
+[gd_scene load_steps=26 format=3 uid="uid://000mnlm4usd0"]
 
 [ext_resource type="Script" uid="uid://bvsy2i1anfr5i" path="res://src/Scripts/main.gd" id="1_0dd57"]
 [ext_resource type="Texture2D" uid="uid://wlo1euh3b6yk" path="res://src/Sprites/BG.png" id="1_2av6j"]
@@ -9,10 +9,11 @@
 [ext_resource type="Texture2D" uid="uid://brdapwl5ry4ch" path="res://src/Sprites/AntBright.png" id="8_vdiyp"]
 [ext_resource type="PackedScene" uid="uid://cx8chjfirpnvt" path="res://src/Scenes/juice.tscn" id="8_vgwx1"]
 [ext_resource type="Theme" uid="uid://b17elty3y3f28" path="res://src/Resources/theme.tres" id="8_wf0w2"]
+[ext_resource type="Texture2D" uid="uid://dxodxjx80mgom" path="res://src/Sprites/Note.png" id="11_wf0w2"]
+[ext_resource type="Texture2D" uid="uid://dcvjy5s4th0id" path="res://src/Sprites/Speaker.png" id="12_7mk6u"]
 [ext_resource type="Texture2D" uid="uid://gop673u8i0to" path="res://src/Sprites/Title.png" id="13_5na2v"]
+[ext_resource type="Texture2D" uid="uid://wtvvf24yqif0" path="res://src/Sprites/play-7-48.png" id="13_wf0w2"]
 [ext_resource type="LabelSettings" uid="uid://bav3ky0bcp8fs" path="res://src/Resources/TitleSettings.tres" id="14_isqvi"]
-[ext_resource type="Texture2D" uid="uid://cfptycpbtcj4e" path="res://src/Sprites/mouse_left.png" id="15_e2xy3"]
-[ext_resource type="Texture2D" uid="uid://c8em0c0537m50" path="res://src/Sprites/mouse_middle.png" id="16_w0vrg"]
 [ext_resource type="AudioStream" uid="uid://7ha4kstfmtti" path="res://src/Sounds/powerUp (1).wav" id="18_w0vrg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4vboo"]
@@ -69,6 +70,44 @@ _data = {
 &"Spawn": SubResource("Animation_vdiyp")
 }
 
+[sub_resource type="Animation" id="Animation_7mk6u"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(578, 592)]
+}
+
+[sub_resource type="Animation" id="Animation_wf0w2"]
+resource_name = "hover"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(-2, -2, 1),
+"update": 0,
+"values": [Vector2(578, 592), Vector2(578, 582), Vector2(578, 592)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e2xy3"]
+_data = {
+&"RESET": SubResource("Animation_7mk6u"),
+&"hover": SubResource("Animation_wf0w2")
+}
+
 [sub_resource type="LabelSettings" id="LabelSettings_n0mpp"]
 font_size = 64
 
@@ -94,51 +133,16 @@ _data = {
 &"hover": SubResource("Animation_e2xy3")
 }
 
-[sub_resource type="Animation" id="Animation_vh02n"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(37, 518)]
-}
-
-[sub_resource type="Animation" id="Animation_isqvi"]
-resource_name = "hover"
-length = 5.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 2.5, 5),
-"transitions": PackedFloat32Array(-2, -2, -2),
-"update": 0,
-"values": [Vector2(37, 518), Vector2(37, 498), Vector2(37, 518)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_k0mjx"]
-_data = {
-&"RESET": SubResource("Animation_vh02n"),
-&"hover": SubResource("Animation_isqvi")
-}
-
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("levelsUI")]
 script = ExtResource("1_0dd57")
+levelsUI = NodePath("Levels")
+
+[node name="Levels" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_speed = 30.0
-editor_draw_limits = true
 script = ExtResource("5_h6v6y")
+speed = 1000
 
 [node name="AudioListener2D" type="AudioListener2D" parent="Camera2D"]
 
@@ -227,6 +231,22 @@ offset_right = 72.0
 offset_bottom = 178.0
 texture = ExtResource("8_vdiyp")
 
+[node name="Label2" type="Label" parent="UI/UI/MainHud"]
+visible = false
+layout_mode = 0
+offset_left = 578.0
+offset_top = 582.878
+offset_right = 702.0
+offset_bottom = 605.878
+pivot_offset = Vector2(62, 11)
+text = "Direct your ants"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/UI/MainHud/Label2"]
+libraries = {
+&"": SubResource("AnimationLibrary_e2xy3")
+}
+autoplay = "hover"
+
 [node name="CompleteLevel" type="Control" parent="UI/UI"]
 anchors_preset = 0
 offset_left = 1280.0
@@ -285,6 +305,20 @@ scaleFactor = 1.5
 hoverSound = true
 input_dependant = false
 
+[node name="Levels" type="Button" parent="UI/UI/MainMenu"]
+layout_mode = 0
+offset_left = 600.0
+offset_top = 393.0
+offset_right = 680.0
+offset_bottom = 425.0
+pivot_offset = Vector2(28, 16)
+text = "Levels"
+
+[node name="Juice" parent="UI/UI/MainMenu/Levels" instance=ExtResource("8_vgwx1")]
+scaleFactor = 1.5
+hoverSound = true
+input_dependant = false
+
 [node name="Title2" type="Sprite2D" parent="UI/UI/MainMenu"]
 texture_filter = 1
 position = Vector2(640, 167)
@@ -296,55 +330,39 @@ libraries = {
 }
 autoplay = "hover"
 
-[node name="Tutorial" type="Control" parent="UI/UI/MainMenu"]
-anchors_preset = 0
-offset_left = 37.0
-offset_top = 518.0
-offset_right = 267.0
-offset_bottom = 673.0
-metadata/_edit_group_ = true
-
-[node name="Panel" type="Panel" parent="UI/UI/MainMenu/Tutorial"]
+[node name="Music" type="TextureButton" parent="UI/UI/MainMenu"]
+modulate = Color(0.960784, 0.835294, 0.737255, 1)
 layout_mode = 0
-offset_right = 230.0
-offset_bottom = 155.0
+offset_left = 1232.0
+offset_top = 16.0
+offset_right = 1264.0
+offset_bottom = 48.0
+pivot_offset = Vector2(16, 16)
+texture_normal = ExtResource("11_wf0w2")
+ignore_texture_size = true
+stretch_mode = 4
 
-[node name="Label" type="Label" parent="UI/UI/MainMenu/Tutorial"]
+[node name="Juice" parent="UI/UI/MainMenu/Music" instance=ExtResource("8_vgwx1")]
+scaleFactor = 1.5
+hoverSound = true
+input_dependant = false
+
+[node name="Sound" type="TextureButton" parent="UI/UI/MainMenu"]
+modulate = Color(0.960784, 0.835294, 0.737255, 1)
 layout_mode = 0
-offset_left = 35.0
-offset_right = 230.0
-offset_bottom = 153.0
-text = "Spawn Rally Point
-Move Rally Point
-Select Hole (Food Source)
- / Rally Point
-Pan Camera
-"
+offset_left = 1184.0
+offset_top = 16.0
+offset_right = 1216.0
+offset_bottom = 48.0
+pivot_offset = Vector2(16, 16)
+texture_normal = ExtResource("12_7mk6u")
+ignore_texture_size = true
+stretch_mode = 4
 
-[node name="MouseLeft" type="Sprite2D" parent="UI/UI/MainMenu/Tutorial"]
-position = Vector2(14, 12)
-texture = ExtResource("15_e2xy3")
-
-[node name="MouseRight" type="Sprite2D" parent="UI/UI/MainMenu/Tutorial"]
-position = Vector2(14, 37)
-texture = ExtResource("15_e2xy3")
-
-[node name="MouseLeft2" type="Sprite2D" parent="UI/UI/MainMenu/Tutorial"]
-position = Vector2(14, 64)
-texture = ExtResource("15_e2xy3")
-
-[node name="MouseLeft3" type="Sprite2D" parent="UI/UI/MainMenu/Tutorial"]
-position = Vector2(22, 116)
-texture = ExtResource("15_e2xy3")
-
-[node name="MouseLeft4" type="Sprite2D" parent="UI/UI/MainMenu/Tutorial"]
-position = Vector2(6, 116)
-texture = ExtResource("16_w0vrg")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/UI/MainMenu/Tutorial"]
-libraries = {
-&"": SubResource("AnimationLibrary_k0mjx")
-}
+[node name="Juice" parent="UI/UI/MainMenu/Sound" instance=ExtResource("8_vgwx1")]
+scaleFactor = 1.5
+hoverSound = true
+input_dependant = false
 
 [node name="CompleteGame" type="Control" parent="UI/UI"]
 anchors_preset = 0
@@ -442,6 +460,80 @@ scaleFactor = 1.5
 hoverSound = true
 input_dependant = false
 
+[node name="LevelPicker" type="Control" parent="UI/UI"]
+anchors_preset = 0
+offset_left = 1280.0
+offset_right = 2560.0
+offset_bottom = 720.0
+
+[node name="Right" type="TextureButton" parent="UI/UI/LevelPicker"]
+modulate = Color(0.960784, 0.835294, 0.737255, 1)
+layout_mode = 0
+offset_left = 1216.0
+offset_top = 336.0
+offset_right = 1264.0
+offset_bottom = 384.0
+pivot_offset = Vector2(24, 24)
+texture_normal = ExtResource("13_wf0w2")
+
+[node name="Juice" parent="UI/UI/LevelPicker/Right" instance=ExtResource("8_vgwx1")]
+scaleFactor = 1.5
+hoverSound = true
+input_dependant = false
+
+[node name="Left" type="TextureButton" parent="UI/UI/LevelPicker"]
+modulate = Color(0.960784, 0.835294, 0.737255, 1)
+layout_mode = 0
+offset_left = 16.0
+offset_top = 336.0
+offset_right = 64.0
+offset_bottom = 384.0
+pivot_offset = Vector2(24, 24)
+texture_normal = ExtResource("13_wf0w2")
+flip_h = true
+
+[node name="Juice" parent="UI/UI/LevelPicker/Left" instance=ExtResource("8_vgwx1")]
+scaleFactor = 1.5
+hoverSound = true
+input_dependant = false
+
+[node name="Label" type="Label" parent="UI/UI/LevelPicker"]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 88.0
+pivot_offset = Vector2(640, 44)
+text = "Level 1"
+label_settings = ExtResource("14_isqvi")
+horizontal_alignment = 1
+
+[node name="PlayLvlSelect" type="Button" parent="UI/UI/LevelPicker"]
+layout_mode = 0
+offset_left = 654.0
+offset_top = 672.0
+offset_right = 710.0
+offset_bottom = 704.0
+pivot_offset = Vector2(28, 16)
+text = "Play"
+
+[node name="Juice" parent="UI/UI/LevelPicker/PlayLvlSelect" instance=ExtResource("8_vgwx1")]
+scaleFactor = 1.5
+hoverSound = true
+input_dependant = false
+
+[node name="Back" type="Button" parent="UI/UI/LevelPicker"]
+layout_mode = 0
+offset_left = 570.0
+offset_top = 672.0
+offset_right = 626.0
+offset_bottom = 704.0
+pivot_offset = Vector2(28, 16)
+text = "Back"
+
+[node name="Juice" parent="UI/UI/LevelPicker/Back" instance=ExtResource("8_vgwx1")]
+scaleFactor = 1.5
+hoverSound = true
+input_dependant = false
+
 [node name="BG" type="CanvasLayer" parent="."]
 layer = -1
 
@@ -462,7 +554,17 @@ volume_db = -20.0
 [connection signal="pressed" from="UI/UI/CompleteLevel/NextLevel" to="." method="_on_next_level_pressed"]
 [connection signal="pressed" from="UI/UI/CompleteLevel/NextLevel" to="UI/UI" method="_on_next_level_pressed"]
 [connection signal="pressed" from="UI/UI/MainMenu/Play" to="UI/UI" method="_on_play_pressed"]
+[connection signal="pressed" from="UI/UI/MainMenu/Levels" to="." method="_on_levels_pressed"]
+[connection signal="pressed" from="UI/UI/MainMenu/Levels" to="UI/UI" method="_on_levels_pressed"]
+[connection signal="pressed" from="UI/UI/MainMenu/Music" to="UI/UI" method="_on_music_pressed"]
+[connection signal="pressed" from="UI/UI/MainMenu/Sound" to="UI/UI" method="_on_sound_pressed"]
 [connection signal="pressed" from="UI/UI/CompleteGame/MainMenu" to="UI/UI" method="_on_main_menu_pressed"]
 [connection signal="pressed" from="UI/UI/DeathMenu/Retry" to="UI/UI" method="_on_retry_pressed"]
 [connection signal="pressed" from="UI/UI/PauseMenu/PausePlay" to="UI/UI" method="_on_pause_play_pressed"]
 [connection signal="pressed" from="UI/UI/PauseMenu/PauseMainMenu" to="UI/UI" method="_on_pause_main_menu_pressed"]
+[connection signal="pressed" from="UI/UI/LevelPicker/Right" to="." method="_on_right_pressed"]
+[connection signal="pressed" from="UI/UI/LevelPicker/Right" to="UI/UI" method="_on_right_pressed"]
+[connection signal="pressed" from="UI/UI/LevelPicker/Left" to="." method="_on_left_pressed"]
+[connection signal="pressed" from="UI/UI/LevelPicker/PlayLvlSelect" to="." method="_on_play_lvl_select_pressed"]
+[connection signal="pressed" from="UI/UI/LevelPicker/PlayLvlSelect" to="UI/UI" method="_on_play_lvl_select_pressed"]
+[connection signal="pressed" from="UI/UI/LevelPicker/Back" to="UI/UI" method="_on_back_pressed"]

@@ -1,15 +1,143 @@
-[gd_scene load_steps=7 format=4 uid="uid://d27y45pmpxvlg"]
+[gd_scene load_steps=21 format=4 uid="uid://d27y45pmpxvlg"]
 
 [ext_resource type="TileSet" uid="uid://b53yyb61spxfu" path="res://src/Resources/tileset.tres" id="1_uqqq8"]
 [ext_resource type="PackedScene" uid="uid://ktynuufwlole" path="res://src/Scenes/hole.tscn" id="2_uup3s"]
 [ext_resource type="PackedScene" uid="uid://d4ik23ij30ue7" path="res://src/Scenes/nest.tscn" id="3_6idbk"]
 [ext_resource type="PackedScene" uid="uid://bmbwywh8gixyr" path="res://src/Scenes/ant.tscn" id="4_tfpbo"]
 [ext_resource type="PackedScene" uid="uid://o3nd7glkhg8l" path="res://src/Scenes/enemy_nest.tscn" id="5_f72hg"]
+[ext_resource type="Theme" uid="uid://b17elty3y3f28" path="res://src/Resources/theme.tres" id="6_tfpbo"]
+[ext_resource type="LabelSettings" uid="uid://b4g2ecn5spb1c" path="res://src/Resources/labelSettings.tres" id="7_f72hg"]
+[ext_resource type="Script" uid="uid://d27vx4otj2yxl" path="res://src/Scripts/tutorial.gd" id="7_s3txp"]
+[ext_resource type="Texture2D" uid="uid://cfptycpbtcj4e" path="res://src/Sprites/mouse_left.png" id="8_s3txp"]
+[ext_resource type="Texture2D" uid="uid://wiov2aegyolo" path="res://src/Sprites/mouse.png" id="9_f72hg"]
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_uqqq8"]
-vertices = PackedVector2Array(777.898, 107.93, -39.7969, 103.062, -35.1875, -133, 535, -133, 773.102, -389, 535, -389)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 0, 3, 5)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-45, -143, -50, 113, 788, 118, 783, -399, 525, -399, 525, -143)])
+[sub_resource type="SpriteFrames" id="SpriteFrames_s3txp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_s3txp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_f72hg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.0
+}]
+
+[sub_resource type="Animation" id="Animation_s72k4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-153, -127)]
+}
+
+[sub_resource type="Animation" id="Animation_sgqlp"]
+resource_name = "hover"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(-2, -2, 1),
+"update": 0,
+"values": [Vector2(-153, -127), Vector2(-153, -137), Vector2(-153, -127)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8u8xu"]
+_data = {
+&"RESET": SubResource("Animation_s72k4"),
+&"hover": SubResource("Animation_sgqlp")
+}
+
+[sub_resource type="Animation" id="Animation_f72hg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(16, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_tfpbo"]
+resource_name = "hover"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, -2, 1),
+"update": 0,
+"values": [Vector2(-327, -56), Vector2(-327, -66), Vector2(-327, -56)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s3txp"]
+_data = {
+&"RESET": SubResource("Animation_f72hg"),
+&"hover": SubResource("Animation_tfpbo")
+}
+
+[sub_resource type="Animation" id="Animation_8u8xu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-302, -55)]
+}
+
+[sub_resource type="Animation" id="Animation_s3txp"]
+resource_name = "hover"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(-2, -2, 1),
+"update": 0,
+"values": [Vector2(-302, -55), Vector2(-302, -65), Vector2(-302, -55)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t6sj4"]
+_data = {
+&"RESET": SubResource("Animation_8u8xu"),
+&"hover": SubResource("Animation_s3txp")
+}
 
 [node name="Level1" type="Node2D"]
 
@@ -19,11 +147,6 @@ position = Vector2(-300, 0)
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAD9//r/AgABAAEAAAD+//r/AgABAAEAAAD///r/AgABAAEAAAAAAPr/AgABAAEAAAABAPr/AgABAAEAAAACAPr/AgABAAEAAAADAPr/AgABAAEAAAAEAPr/AgABAAEAAAAFAPr/AgABAAEAAAAGAPr/AgABAAEAAAAHAPr/AgABAAEAAAAIAPr/AgABAAEAAAAJAPr/AgABAAEAAAAKAPr/AgABAAEAAAALAPr/AgABAAEAAAAMAPr/AgABAAEAAAANAPr/AgABAAEAAAAOAPr/AgABAAEAAAAPAPr/AgABAAEAAAAPAPn/AgABAAEAAAAPAPj/AgABAAEAAAAPAPf/AgABAAEAAAAPAPb/AgABAAEAAAAPAPX/AgABAAEAAAAPAPT/AgABAAEAAAAPAPP/AgABAAEAAAAPAPL/AgABAAEAAAAQAPL/AgABAAEAAAARAPL/AgABAAEAAAASAPL/AgABAAEAAAATAPL/AgABAAEAAAAUAPL/AgABAAEAAAAVAPL/AgABAAEAAAAWAPL/AgABAAEAAAAXAPL/AgABAAEAAAAYAPL/AgABAAEAAAAZAPL/AgABAAEAAAAZAPP/AgABAAEAAAAZAPT/AgABAAEAAAAZAPX/AgABAAEAAAAZAPb/AgABAAEAAAAZAPf/AgABAAEAAAAZAPj/AgABAAEAAAAZAPn/AgABAAEAAAAZAPr/AgABAAEAAAAZAPv/AgABAAEAAAAZAPz/AgABAAEAAAAZAP3/AgABAAEAAAAZAP7/AgABAAEAAAAZAP//AgABAAEAAAAZAAAAAgABAAEAAAAZAAEAAgABAAEAAAAZAAIAAgABAAEAAAAZAAMAAgABAAEAAAAZAAQAAgABAAEAAAAYAAQAAgABAAEAAAAXAAQAAgABAAEAAAAWAAQAAgABAAEAAAAVAAQAAgABAAEAAAAUAAQAAgABAAEAAAATAAQAAgABAAEAAAASAAQAAgABAAEAAAARAAQAAgABAAEAAAAQAAQAAgABAAEAAAAPAAQAAgABAAEAAAAOAAQAAgABAAEAAAANAAQAAgABAAEAAAAMAAQAAgABAAEAAAALAAQAAgABAAEAAAAKAAQAAgABAAEAAAAJAAQAAgABAAEAAAAIAAQAAgABAAEAAAAHAAQAAgABAAEAAAAGAAQAAgABAAEAAAAFAAQAAgABAAEAAAAEAAQAAgABAAEAAAADAAQAAgABAAEAAAACAAQAAgABAAEAAAABAAQAAgABAAEAAAAAAAQAAgABAAEAAAD//wQAAgABAAEAAAD+/wQAAgABAAEAAAD9/wQAAgABAAEAAAD9/wMAAgABAAEAAAD9/wIAAgABAAEAAAD9/wEAAgABAAEAAAD9//7/AgABAAEAAAD9//3/AgABAAEAAAD9//z/AgABAAEAAAD9//v/AgABAAEAAAD///v/AgABAAIAAAAAAPv/AgABAAIAAAABAPv/AgABAAIAAAACAPv/AgABAAIAAAADAPv/AgABAAIAAAAEAPv/AgABAAIAAAAFAPv/AgABAAIAAAAGAPv/AgABAAIAAAAHAPv/AgABAAIAAAAIAPv/AgABAAIAAAAJAPv/AgABAAIAAAAKAPv/AgABAAIAAAALAPv/AgABAAIAAAAMAPv/AgABAAIAAAANAPv/AgABAAIAAAAOAPv/AgABAAIAAAAPAPv/AgABAAIAAAAQAPr/AgACAAEAAAAQAPn/AgACAAEAAAAQAPj/AgACAAEAAAAQAPf/AgACAAEAAAAQAPb/AgACAAEAAAAQAPX/AgACAAEAAAAQAPT/AgACAAEAAAAQAPP/AgACAAIAAAARAPP/AgABAAIAAAASAPP/AgABAAIAAAATAPP/AgABAAIAAAAUAPP/AgABAAIAAAAVAPP/AgABAAIAAAAWAPP/AgABAAIAAAAXAPP/AgABAAIAAAAYAPP/AgAAAAIAAAAYAPT/AgAAAAEAAAAYAPX/AgAAAAEAAAAYAPb/AgAAAAEAAAAYAPf/AgAAAAEAAAAYAPj/AgAAAAEAAAAYAPn/AgAAAAEAAAAYAPr/AgAAAAEAAAAYAPv/AgAAAAEAAAAYAPz/AgAAAAEAAAAYAP3/AgAAAAEAAAAYAP7/AgAAAAEAAAAYAP//AgAAAAEAAAAYAAAAAgAAAAEAAAAYAAEAAgAAAAEAAAAYAAIAAgAAAAEAAAAYAAMAAgAAAAAAAAAXAAMAAgABAAAAAAAWAAMAAgABAAAAAAAVAAMAAgABAAAAAAAUAAMAAgABAAAAAAATAAMAAgABAAAAAAASAAMAAgABAAAAAAARAAMAAgABAAAAAAAQAAMAAgABAAAAAAAPAAMAAgABAAAAAAAOAAMAAgABAAAAAAANAAMAAgABAAAAAAAMAAMAAgABAAAAAAALAAMAAgABAAAAAAAKAAMAAgABAAAAAAAJAAMAAgABAAAAAAAIAAMAAgABAAAAAAAHAAMAAgABAAAAAAAGAAMAAgABAAAAAAAFAAMAAgABAAAAAAAEAAMAAgABAAAAAAADAAMAAgABAAAAAAACAAMAAgABAAAAAAABAAMAAgABAAAAAAAAAAMAAgABAAAAAAD//wMAAgABAAAAAAD+/wMAAgACAAAAAAD+/wIAAgACAAEAAAD+/wEAAgACAAEAAAD+/wAAAgACAAEAAAD+////AgACAAEAAAD+//7/AgACAAEAAAD+//3/AgACAAEAAAD+//z/AgACAAEAAAD+//v/AgACAAIAAAD9////AgABAAEAAAD9/wAAAgABAAEAAAAIAAAAAgADAAAAAAAIAP//AgADAAAAAAAIAP7/AgADAAAAAAAIAP3/AgADAAAAAAAIAPz/AgADAAAAAAAHAPz/AgADAAAAAAAGAPz/AgADAAAAAAAFAPz/AgADAAAAAAAEAPz/AgADAAAAAAADAPz/AgADAAAAAAACAPz/AgADAAAAAAABAPz/AgADAAAAAAAAAPz/AgADAAAAAAD///z/AgADAAAAAAD///3/AgADAAAAAAD///7/AgADAAAAAAD/////AgADAAAAAAD//wAAAgADAAAAAAD//wEAAgADAAAAAAD//wIAAgADAAAAAAAAAAIAAgADAAAAAAAAAAEAAgADAAAAAAAAAAAAAgADAAAAAAAAAP//AgADAAAAAAAAAP7/AgADAAAAAAAAAP3/AgADAAAAAAABAP3/AgADAAAAAAABAP7/AgADAAAAAAABAAEAAgADAAAAAAABAAIAAgADAAAAAAACAAIAAgADAAAAAAACAAEAAgADAAAAAAACAP7/AgADAAAAAAACAP3/AgADAAAAAAADAP3/AgADAAAAAAADAP7/AgADAAAAAAADAP//AgADAAAAAAADAAAAAgADAAAAAAADAAEAAgADAAAAAAADAAIAAgADAAAAAAAEAAIAAgADAAAAAAAEAAEAAgADAAAAAAAEAAAAAgADAAAAAAAEAP//AgADAAAAAAAEAP7/AgADAAAAAAAEAP3/AgADAAAAAAAFAP3/AgADAAAAAAAFAP7/AgADAAAAAAAFAP//AgADAAAAAAAFAAAAAgADAAAAAAAFAAEAAgADAAAAAAAFAAIAAgADAAAAAAAGAAIAAgADAAAAAAAGAAEAAgADAAAAAAAGAAAAAgADAAAAAAAGAP//AgADAAAAAAAGAP7/AgADAAAAAAAGAP3/AgADAAAAAAAHAP3/AgADAAAAAAAHAP7/AgADAAAAAAAHAP//AgADAAAAAAAHAAAAAgADAAAAAAAHAAEAAgADAAAAAAAHAAIAAgADAAAAAAAIAAIAAgADAAAAAAAIAAEAAgADAAAAAAAJAAEAAgADAAAAAAAJAAAAAgADAAAAAAAJAP//AgADAAAAAAAJAP7/AgADAAAAAAAJAP3/AgADAAAAAAAJAPz/AgADAAAAAAAKAPz/AgADAAAAAAAKAP3/AgADAAAAAAAKAP7/AgADAAAAAAAKAP//AgADAAAAAAAKAAAAAgADAAAAAAAKAAEAAgADAAAAAAAKAAIAAgADAAAAAAAJAAIAAgADAAAAAAALAAIAAgADAAAAAAALAAEAAgADAAAAAAALAAAAAgADAAAAAAALAP//AgADAAAAAAALAP7/AgADAAAAAAALAP3/AgADAAAAAAALAPz/AgADAAAAAAAMAPz/AgADAAAAAAAMAP3/AgADAAAAAAAMAP7/AgADAAAAAAAMAP//AgADAAAAAAAMAAAAAgADAAAAAAAMAAEAAgADAAAAAAAMAAIAAgADAAAAAAANAAIAAgADAAAAAAANAAEAAgADAAAAAAANAAAAAgADAAAAAAANAP//AgADAAAAAAANAP7/AgADAAAAAAANAP3/AgADAAAAAAANAPz/AgADAAAAAAAOAPz/AgADAAAAAAAOAP3/AgADAAAAAAAOAP7/AgADAAAAAAAOAP//AgADAAAAAAAOAAAAAgADAAAAAAAOAAEAAgADAAAAAAAOAAIAAgADAAAAAAAPAAIAAgADAAAAAAAPAAEAAgADAAAAAAAPAAAAAgADAAAAAAAPAP//AgADAAAAAAAPAP7/AgADAAAAAAAPAP3/AgADAAAAAAAPAPz/AgADAAAAAAAQAPz/AgADAAAAAAAQAPv/AgADAAAAAAARAPv/AgADAAAAAAARAPr/AgADAAAAAAARAPn/AgADAAAAAAARAPj/AgADAAAAAAARAPf/AgADAAAAAAARAPb/AgADAAAAAAARAPX/AgADAAAAAAARAPT/AgADAAAAAAASAPT/AgADAAAAAAASAPX/AgADAAAAAAASAPb/AgADAAAAAAASAPf/AgADAAAAAAASAPj/AgADAAAAAAASAPn/AgADAAAAAAASAPr/AgADAAAAAAASAPv/AgADAAAAAAASAPz/AgADAAAAAAARAPz/AgADAAAAAAARAP3/AgADAAAAAAAQAP3/AgADAAAAAAAQAP7/AgADAAAAAAAQAP//AgADAAAAAAAQAAAAAgADAAAAAAAQAAEAAgADAAAAAAAQAAIAAgADAAAAAAARAAIAAgADAAAAAAARAAEAAgADAAAAAAARAAAAAgADAAAAAAARAP//AgADAAAAAAARAP7/AgADAAAAAAASAP7/AgADAAAAAAASAP3/AgADAAAAAAATAP3/AgADAAAAAAATAPz/AgADAAAAAAATAPv/AgADAAAAAAATAPr/AgADAAAAAAATAPn/AgADAAAAAAATAPj/AgADAAAAAAATAPf/AgADAAAAAAATAPb/AgADAAAAAAATAPX/AgADAAAAAAATAPT/AgADAAAAAAAUAPT/AgADAAAAAAAUAPX/AgADAAAAAAAUAPb/AgADAAAAAAAUAPf/AgADAAAAAAAUAPj/AgADAAAAAAAUAPn/AgADAAAAAAAUAPr/AgADAAAAAAAUAPv/AgADAAAAAAAUAPz/AgADAAAAAAAUAP3/AgADAAAAAAAUAP7/AgADAAAAAAATAP7/AgADAAAAAAATAP//AgADAAAAAAASAP//AgADAAAAAAASAAAAAgADAAAAAAASAAEAAgADAAAAAAASAAIAAgADAAAAAAATAAIAAgADAAAAAAATAAEAAgADAAAAAAATAAAAAgADAAAAAAAUAAAAAgADAAAAAAAUAP//AgADAAAAAAAVAP//AgADAAAAAAAVAP7/AgADAAAAAAAVAP3/AgADAAAAAAAVAPz/AgADAAAAAAAVAPv/AgADAAAAAAAVAPr/AgADAAAAAAAVAPn/AgADAAAAAAAVAPj/AgADAAAAAAAVAPf/AgADAAAAAAAVAPb/AgADAAAAAAAVAPX/AgADAAAAAAAVAPT/AgADAAAAAAAWAPT/AgADAAAAAAAWAPX/AgADAAAAAAAWAPb/AgADAAAAAAAWAPf/AgADAAAAAAAWAPj/AgADAAAAAAAWAPn/AgADAAAAAAAWAPr/AgADAAAAAAAWAPv/AgADAAAAAAAWAPz/AgADAAAAAAAWAP3/AgADAAAAAAAWAP7/AgADAAAAAAAWAP//AgADAAAAAAAWAAAAAgADAAAAAAAVAAAAAgADAAAAAAAVAAEAAgADAAAAAAAUAAEAAgADAAAAAAAUAAIAAgADAAAAAAAVAAIAAgADAAAAAAAWAAIAAgADAAAAAAAWAAEAAgADAAAAAAAXAAEAAgADAAAAAAAXAAAAAgADAAAAAAAXAP//AgADAAAAAAAXAP7/AgADAAAAAAAXAP3/AgADAAAAAAAXAPz/AgADAAAAAAAXAPv/AgADAAAAAAAXAPr/AgADAAAAAAAXAPn/AgADAAAAAAAXAPj/AgADAAAAAAAXAPf/AgADAAAAAAAXAPb/AgADAAAAAAAXAPX/AgADAAAAAAAXAPT/AgADAAAAAAAXAAIAAgADAAAAAAABAP//AgADAAAAAAABAAAAAgADAAAAAAACAP//AgADAAAAAAACAAAAAgADAAAAAAA=")
 tile_set = ExtResource("1_uqqq8")
-navigation_enabled = false
-
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
-position = Vector2(-300, 0)
-navigation_polygon = SubResource("NavigationPolygon_uqqq8")
 
 [node name="Rallys" type="Node2D" parent="."]
 
@@ -37,13 +160,16 @@ navigation_polygon = SubResource("NavigationPolygon_uqqq8")
 position = Vector2(-68, -77)
 
 [node name="Hole2" parent="Holes" instance=ExtResource("2_uup3s")]
-position = Vector2(71, 38)
+position = Vector2(110, 70)
 
 [node name="Hole3" parent="Holes" instance=ExtResource("2_uup3s")]
-position = Vector2(381, 18)
+position = Vector2(413, 51)
 
 [node name="Hole4" parent="Holes" instance=ExtResource("2_uup3s")]
-position = Vector2(252, -82)
+position = Vector2(328, -103)
+
+[node name="Hole5" parent="Holes" instance=ExtResource("2_uup3s")]
+position = Vector2(-191, 88)
 
 [node name="Nests" type="Node2D" parent="."]
 
@@ -58,3 +184,70 @@ rallys = NodePath("../../Rallys")
 position = Vector2(358, -295)
 antsContainer = NodePath("../../EnemyAnts")
 playerNest = NodePath("../Nest")
+
+[node name="Tutorial" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+offset_right = 185.0
+offset_bottom = 23.0
+theme = ExtResource("6_tfpbo")
+script = ExtResource("7_s3txp")
+
+[node name="Label" type="Label" parent="Tutorial"]
+visible = false
+layout_mode = 0
+offset_left = -153.0
+offset_top = -127.0
+offset_right = 16.0
+offset_bottom = -104.0
+text = "select and assign ants"
+label_settings = ExtResource("7_f72hg")
+
+[node name="TextureRect" type="AnimatedSprite2D" parent="Tutorial/Label"]
+position = Vector2(-10, 14)
+sprite_frames = SubResource("SpriteFrames_s3txp")
+autoplay = "default"
+frame = 1
+frame_progress = 0.419885
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Tutorial/Label"]
+libraries = {
+&"": SubResource("AnimationLibrary_8u8xu")
+}
+autoplay = "hover"
+
+[node name="Label2" type="Label" parent="Tutorial"]
+visible = false
+layout_mode = 0
+offset_left = 16.0
+offset_right = 156.0
+offset_bottom = 23.0
+pivot_offset = Vector2(70, 11)
+text = "Grow Your Swarm"
+label_settings = ExtResource("7_f72hg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Tutorial/Label2"]
+libraries = {
+&"": SubResource("AnimationLibrary_s3txp")
+}
+autoplay = "hover"
+
+[node name="Label3" type="Label" parent="Tutorial"]
+visible = false
+layout_mode = 0
+offset_left = -302.0
+offset_top = -55.0
+offset_right = -211.0
+offset_bottom = -32.0
+pivot_offset = Vector2(45, 11)
+text = "Get 15 bugs"
+label_settings = ExtResource("7_f72hg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Tutorial/Label3"]
+libraries = {
+&"": SubResource("AnimationLibrary_t6sj4")
+}
+autoplay = "hover"
+
+[connection signal="selected" from="Holes/Hole" to="Tutorial" method="_on_hole_selected"]

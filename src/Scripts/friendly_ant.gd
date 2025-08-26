@@ -32,12 +32,17 @@ func lookForJob() -> void:
 			assign(i.rallyModule)
 			break
 	
+	var closest: Node = null
 	if not assigned:
 		for i in holes.get_children():
 			if i.rallyModule.assignedAntsNum > i.rallyModule.assignedAnts.size() and i.rallyModule.assignable:
-				i.rallyModule.addAnt(self)
-				assign(i.rallyModule)
-				break
+				if not closest:
+					closest = i
+				if nest.position.distance_to(i.position) <= nest.position.distance_to(closest.position):
+					closest.rallyModule.assignedAnts.erase(self)
+					closest = i
+					i.rallyModule.addAnt(self)
+					assign(i.rallyModule)
 
 func deliverFood() -> void:
 	$Sprite2D.texture = empty
@@ -58,13 +63,14 @@ func collectFood():
 #	pass
 
 func process() -> void:
-	if not assigned and not hasFood:
+	if not assigned and not hasFood and nest:
 			lookForJob()
-	elif hasFood:
+	elif hasFood and nest:
 		navigation2D.target_position = nest.position
 		reachedTarget = false
 	if not rally:
 		unassign()
+	
 
 func _on_range_area_entered(area: Area2D) -> void:
 	if area.is_in_group("Enemy ant") or area.is_in_group("Enemy nest"):

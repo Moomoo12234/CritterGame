@@ -1,6 +1,7 @@
 extends Node
 
 signal onSelected
+signal deselected
 
 @export var enemy: bool
 
@@ -21,7 +22,8 @@ var selected: bool = false
 
 func clear()-> void:
 	for i in assignedAnts:
-		removeAnt(i)
+		if i:
+			removeAnt(i)
 
 func subtract() -> void:
 	if Input.is_action_pressed("ctrl"):
@@ -69,7 +71,7 @@ func _process(delta: float) -> void:
 				lbl.visible = true
 			elif Input.is_action_just_pressed("Select") and not HoverModule.hover:
 				selected = false
-				emit_signal("onSelected")
+				emit_signal("deselected")
 				lbl.visible = false
 		
 		lbl.text = str(assignedAntsNum)

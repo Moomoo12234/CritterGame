@@ -19,7 +19,7 @@ bg_color = Color(0.960784, 0.835294, 0.737255, 1)
 [node name="EnemyNest" type="Node2D" node_paths=PackedStringArray("rallyModule")]
 script = ExtResource("1_78lnq")
 ant = ExtResource("2_q6u6t")
-guard_amnt = 10
+guard_amnt = 20
 hp = 20
 rallyModule = NodePath("RallyModule")
 
@@ -40,6 +40,7 @@ rotJuice = false
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 8.0
+one_shot = true
 
 [node name="Area2D" type="Area2D" parent="." groups=["Enemy nest"]]
 
@@ -65,7 +66,7 @@ offset_right = 35.0
 offset_bottom = 35.0
 theme_override_styles/background = SubResource("StyleBoxFlat_wtfqi")
 theme_override_styles/fill = SubResource("StyleBoxFlat_lx0rb")
-max_value = 5.0
+max_value = 10.0
 value = 5.0
 show_percentage = false
 

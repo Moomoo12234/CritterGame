@@ -75,7 +75,9 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 		#	area.get_parent().deliverFood()
 
 func _on_sprite_2d_mouse_entered() -> void:
-	$HealthBar.visible = true
+	if Globals.input_enabled:
+		$HealthBar.visible = true
 
 func _on_sprite_2d_mouse_exited() -> void:
-	$HealthBar.visible = false
+	if Globals.input_enabled:
+		$HealthBar.visible = false

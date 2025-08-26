@@ -6,6 +6,7 @@ class_name ant
 @export var nest: Node2D
 
 @export var navigation2D: NavigationAgent2D
+var navPos:Vector2
 
 @export var speed: int
 @export var moveRange: int
@@ -21,6 +22,8 @@ var prevTarget: Vector2
 
 var eTargets = []
 
+var updateIndex = randi_range(0, 1)
+var updateNum = 0
 func knockback():
 	accelVector = -10
 
@@ -84,7 +87,10 @@ func move(dt: float):
 	#reachedTarget = navigation2D.is_target_reached()
 	
 	#look_at(navigation2D.get_next_path_position())
-	rotation = lerp_angle(rotation, position.angle_to_point(navigation2D.get_next_path_position()), 10.0* dt)
+	if updateIndex == updateNum:
+		navPos = navigation2D.get_next_path_position()
+	var i  = clamp(10.0 * dt, 0, 1)
+	rotation = lerp_angle(rotation, position.angle_to_point(navPos), i)
 	
 	accelVector = lerp(accelVector, 1.0,  10.0 * dt)
 	if 1 - accelVector < 0.05:
@@ -105,6 +111,7 @@ func _ready() -> void:
 	#assign(nest)
 	pickTarget(rally)
 	$MoveTimer.start(randf_range(0.5, 1.5))
+	navPos = navigation2D.get_next_path_position()
 	
 	nest.connect("die", die)
 
@@ -112,6 +119,10 @@ func process() -> void:
 	pass
 
 func _process(delta: float) -> void:
+	if updateNum == 0:
+		updateNum = 1
+	elif updateNum == 1:
+		updateNum = 0
 	if hp >0 and not Globals.paused:
 		move(delta)
 		
@@ -143,4 +154,4 @@ func _on_move_timer_timeout() -> void:
 				combat = false
 			else:
 				updateTarget()
-	$MoveTimer.start(randf_range(0.5, 1.5))
+	$MoveTimer.start(randi_range(1, 5))

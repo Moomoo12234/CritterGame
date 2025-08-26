@@ -5,14 +5,14 @@ extends Node
 
 @export var scaleFactor: float = 2
 @export var delay: float = 0.05
-
+@export var enabled: bool = true
 @export var clickJuice: bool = false
 @export var hoverSound: bool = true
 @export var rotJuice: bool = true
 @export var input_dependant: bool = true
 
 func click() -> void:
-	if clickJuice:
+	if clickJuice and enabled:
 		var tween = create_tween().set_parallel().set_trans(Tween.TRANS_QUAD)
 		tween.tween_property(parent ,"scale", Vector2(scaleFactor + 0.2, scaleFactor + 0.2), delay).set_ease(Tween.EASE_OUT)
 		tween.chain().tween_property(parent,"scale", Vector2(scaleFactor, scaleFactor), delay).set_ease(Tween.EASE_IN)
@@ -38,25 +38,28 @@ func hoverBig() -> void:
 		$Hover.play()
 
 func pressed() -> void:
-	if input_dependant:
-		if Globals.input_enabled:
+	if enabled:
+		if input_dependant:
+			if Globals.input_enabled:
+				click()
+		else:
 			click()
-	else:
-		click()
 
 func mouse_entered() -> void:
-	if input_dependant:
-		if Globals.input_enabled:
+	if enabled:
+		if input_dependant:
+			if Globals.input_enabled:
+				hoverBig()
+		else:
 			hoverBig()
-	else:
-		hoverBig()
 
 func mouse_exited() -> void:
-	if input_dependant:
-		if Globals.input_enabled:
+	if enabled:
+		if input_dependant:
+			if Globals.input_enabled:
+				hover_small()
+		else:
 			hover_small()
-	else:
-		hover_small()
 	#parent.scale = Vector2(1, 1)
 	#parent.rotation += deg_to_rad(2 * scaleFactor)
 

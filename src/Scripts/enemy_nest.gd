@@ -54,6 +54,7 @@ func _process(delta: float) -> void:
 func _on_timer_timeout() -> void:
 	if Globals.input_enabled and not Globals.paused:
 		spawnAnt()
+	$SpawnTimer.start($SpawnTimer.wait_time - 0.02)
 
 func _on_spawn_delay_timeout() -> void:
 	$SpawnTimer.start()

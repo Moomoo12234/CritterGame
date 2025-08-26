@@ -30,6 +30,7 @@ script = SubResource("GDScript_eyssc")
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("1_gulap")
 volume_db = -20.0
+bus = &"Music"
 playback_type = 1
 
 [connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]
