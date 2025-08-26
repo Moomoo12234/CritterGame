@@ -38,3 +38,9 @@ func controls(delta: float) -> void:
 func _process(delta: float) -> void:
 	if Globals.input_enabled:
 		controls(delta)
+	else:
+		var mousePos: Vector2 = get_local_mouse_position()
+		var dist: Vector2 = mousePos / Vector2(1280, 720)
+		var tween = create_tween().set_parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(self, "offset", dist * 10, 0.5)
+		tween.tween_property(self, "zoom", Vector2(1, 1), 0.5)

@@ -7,6 +7,8 @@ func die():
 		elif self in nest.ants:
 			nest.ants.erase(self)
 	$Sprite2D.texture = dead
+	get_node("./GPUParticles2D").modulate = deadPartCol
+	get_node("./GPUParticles2D").emitting = true
 	var tween = create_tween()
 	tween.tween_property($Sprite2D, "modulate", Color(1.0, 1.0, 1.0, 0.0), 1)
 	await tween.finished

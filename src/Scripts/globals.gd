@@ -1,6 +1,6 @@
 extends Node
 
-var beaten = 10
+var beaten = 0
 
 var input_enabled: bool = false
 var lvl: int = 0

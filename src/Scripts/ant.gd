@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name ant
 
 @export var dead: Texture2D
+@export var deadPartCol: Color
 
 @export var nest: Node2D
 
@@ -32,6 +33,8 @@ func die():
 		if rally.has_method("removeAnt"):
 			rally.removeAnt(self, true)
 	$Sprite2D.texture = dead
+	get_node("./GPUParticles2D").modulate = deadPartCol
+	get_node("./GPUParticles2D").emitting = true
 	var tween = create_tween()
 	tween.tween_property($Sprite2D, "modulate", Color(1.0, 1.0, 1.0, 0.0), 1)
 	await tween.finished

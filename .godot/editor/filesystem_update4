@@ -3,6 +3,7 @@ res://src/Resources/tileset.tres
 res://src/Resources/labelSettings.tres
 res://src/Resources/theme.tres
 res://src/Resources/TitleSettings.tres
+res://src/Scripts/camera_2d.gd
 res://src/Scenes/ant.tscn
 res://src/Scenes/hole.tscn
 res://src/Scenes/level_3.tscn
@@ -19,3 +20,6 @@ res://src/Scenes/level_7.tscn
 res://src/Scenes/music_manager.tscn
 res://src/Scenes/level_8.tscn
 res://src/Scripts/ant.gd
+res://src/Scripts/friendly_ant.gd
+res://src/Scripts/enemy_ant.gd
+res://src/Scripts/globals.gd

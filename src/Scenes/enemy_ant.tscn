@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cavtimjsqchf1"]
+[gd_scene load_steps=10 format=3 uid="uid://cavtimjsqchf1"]
 
 [ext_resource type="Script" uid="uid://cd62bxki4c63j" path="res://src/Scripts/enemy_ant.gd" id="1_11swx"]
 [ext_resource type="Texture2D" uid="uid://d3dbpfgqb5iyv" path="res://src/Sprites/EnemyAnt.png" id="2_11swx"]
 [ext_resource type="Texture2D" uid="uid://dd70dyd128t6f" path="res://src/Sprites/DeadAnt.png" id="2_siuim"]
+[ext_resource type="Texture2D" uid="uid://77ddloer0h80" path="res://src/Sprites/Pixel.png" id="4_h5ahc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ocbbg"]
 size = Vector2(14, 8)
@@ -10,9 +11,27 @@ size = Vector2(14, 8)
 [sub_resource type="CircleShape2D" id="CircleShape2D_11swx"]
 radius = 64.0
 
+[sub_resource type="Curve" id="Curve_i27oh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -7.55712, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rm6n4"]
+curve = SubResource("Curve_i27oh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o1ssq"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_rm6n4")
+
 [node name="EnemyAnt" type="CharacterBody2D" node_paths=PackedStringArray("navigation2D") groups=["Enemy ant"]]
 script = ExtResource("1_11swx")
 dead = ExtResource("2_siuim")
+deadPartCol = Color(0.305882, 0.286275, 0.372549, 1)
 navigation2D = NodePath("NavigationAgent2D")
 speed = 2000
 moveRange = 128
@@ -39,6 +58,18 @@ autostart = true
 shape = SubResource("CircleShape2D_11swx")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+modulate = Color(0.305882, 0.286275, 0.372549, 1)
+position = Vector2(6, 0)
+emitting = false
+amount = 10
+texture = ExtResource("4_h5ahc")
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_o1ssq")
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]

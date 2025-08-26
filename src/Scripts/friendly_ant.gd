@@ -1,5 +1,7 @@
 extends ant
 
+@export var foodPartCol: Color
+
 @export var empty: Texture2D
 @export var full: Texture2D
 
@@ -13,6 +15,7 @@ var hasFood: bool = false
 func foodJuice() -> void:
 	$Food.pitch_scale = randf_range(0.9, 1)
 	$Food.play()
+	$GPUParticles2D.modulate = foodPartCol
 	$GPUParticles2D.restart()
 	$AnimationPlayer.play("food")
 

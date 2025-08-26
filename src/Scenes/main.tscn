@@ -235,9 +235,9 @@ texture = ExtResource("8_vdiyp")
 visible = false
 layout_mode = 0
 offset_left = 578.0
-offset_top = 582.878
+offset_top = 592.0
 offset_right = 702.0
-offset_bottom = 605.878
+offset_bottom = 615.0
 pivot_offset = Vector2(62, 11)
 text = "Direct your ants"
 

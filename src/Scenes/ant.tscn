@@ -54,9 +54,11 @@ _data = {
 
 [node name="Ant" type="CharacterBody2D" node_paths=PackedStringArray("navigation2D")]
 script = ExtResource("1_p7xjd")
+foodPartCol = Color(0.760784, 0.635294, 0.537255, 1)
 empty = ExtResource("1_txt7p")
 full = ExtResource("3_prmu5")
 dead = ExtResource("4_ocbbg")
+deadPartCol = Color(0.305882, 0.286275, 0.372549, 1)
 navigation2D = NodePath("NavigationAgent2D")
 speed = 5000
 moveRange = 128
@@ -102,7 +104,7 @@ stream = ExtResource("6_y7nhq")
 volume_db = -25.0
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
-modulate = Color(0.760784, 0.635294, 0.537255, 1)
+modulate = Color(0.305882, 0.286275, 0.372549, 1)
 position = Vector2(6, 0)
 emitting = false
 amount = 10
